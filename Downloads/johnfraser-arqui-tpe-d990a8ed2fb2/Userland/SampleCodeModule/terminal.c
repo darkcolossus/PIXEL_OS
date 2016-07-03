@@ -15,6 +15,8 @@ int hello(char* args);
 int version(char* args);
 int beep(char* args);
 int createProcess();
+int deleteProcess(char * args);
+int listProcesses();
 
 extern void _beep();
 
@@ -92,6 +94,16 @@ void initCommandList(){
 	commands[8].handler = &createProcess;
 	commands[8].use = "Create a process.";
 	commands[8].hidden = FALSE;
+
+	commands[9].key = "delete_process";
+	commands[9].handler = &deleteProcess;
+	commands[9].use = "Delete a process, specified by process id.";
+	commands[9].hidden = FALSE;
+
+	commands[10].key = "list_processes";
+	commands[10].handler = &listProcesses;
+	commands[10].use = "Show the list of processes.";
+	commands[10].hidden = FALSE;
 
 }
 
@@ -181,5 +193,16 @@ int beep(char* args){
 int createProcess(){
 	printf("El proceso se ha creado con exito\n");
 
+	return 0;
+}
+
+int deleteProcess(char* args){
+	printf("El proceso ha sido eliminado con exito\n");
+	return 0;
+}
+
+int listProcesses(){
+	runSyscall(LIST_PROCESSES,0x0,0x0,0x0);
+	printf("Listando procesos...\n");
 	return 0;
 }

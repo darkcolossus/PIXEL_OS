@@ -63,7 +63,9 @@ processNode* deleteProcess(process * p){
    }else {
       actual->next->previous = actual->previous;
    }
-
+   pageFree(actual->currentProcess->userStack);
+   pageFree(actual->currentProcess->kernelStack);
+   kfree(actual);
    return actual;
 }
 
