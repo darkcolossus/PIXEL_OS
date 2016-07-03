@@ -13,7 +13,8 @@ int clear(char* args);
 int help(char* args);
 int hello(char* args);
 int version(char* args);
-int beep(char* args); 
+int beep(char* args);
+int createProcess();
 
 extern void _beep();
 
@@ -87,6 +88,11 @@ void initCommandList(){
 	commands[7].use = "Stops a song before it finishes on its own.";
 	commands[7].hidden = FALSE;
 
+	commands[8].key = "create_process";
+	commands[8].handler = &createProcess;
+	commands[8].use = "Create a process.";
+	commands[8].hidden = FALSE;
+
 }
 
 void shellLine(){
@@ -130,7 +136,7 @@ int commandSelector(char* command){
 int echo(char* args){
 	if(strlen(args) == 0)
 		printf("\n");
-	else 
+	else
 		printf("%s\n",args);
 	return 0;
 }
@@ -169,5 +175,11 @@ int help(char* args){
 
 int beep(char* args){
 	runSyscall(BEEP,0x0,0x0,0x0);
+	return 0;
+}
+
+int createProcess(){
+	printf("El proceso se ha creado con exito\n");
+
 	return 0;
 }
