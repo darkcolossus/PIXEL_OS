@@ -96,7 +96,7 @@ typedef struct {
     uint64_t  PageLevelWriteThrough:1;  // 0 = Write-Back caching, 1=Write-Through caching
     uint64_t  CacheDisabled:1;          // 0 = Cached, 1=Non-Cached
     uint64_t  Accessed:1;               // 0 = Not accessed, 1 = Accessed (set by CPU)
-    uint64_t  Ignored:1;    
+    uint64_t  Ignored:1;
     uint64_t  Reserved:1;               // Reserved
     uint64_t  MustBeZero:4;             // Must Be Zero
     uint64_t  PDPTBaseAddress:40;       // Page Table Base Address
@@ -113,16 +113,21 @@ typedef struct {
     uint64_t  CacheDisabled:1;          // 0 = Cached, 1=Non-Cached
     uint64_t  Accessed:1;               // 0 = Not accessed, 1 = Accessed (set by CPU)
     uint64_t  Dirty:1;              // Ignored
-    uint64_t  MustBe1:1;             
-    uint64_t  Global:1;                        
+    uint64_t  MustBe1:1;
+    uint64_t  Global:1;
     uint64_t  Ignored_1:3;
-    uint64_t  PAT:1;                 
-    uint64_t  Reserved:17;                    
-    uint64_t  PageAddress:22;                    
+    uint64_t  PAT:1;
+    uint64_t  Reserved:17;
+    uint64_t  PageAddress:22;
     uint64_t  Ignored_2:11;             //Ignored
-    uint64_t  Nx:1;                     // No Execute bit    
+    uint64_t  Nx:1;                     // No Execute bit
 
 }   pdpt_entry;
+
+struct buddy {
+	int level;
+	uint8_t tree[1];
+};
 
 // typedef struct{
 //     uint64_t Present:1;
@@ -147,7 +152,7 @@ typedef struct {
     uint64_t directory_ptr:9;
     uint64_t pml4:9;
 } address_struct;
-    
+
 typedef struct
 {
     uint64_t    pe:1;   //Protection Enabled
@@ -168,10 +173,10 @@ typedef struct
 } CR0;
 
 typedef struct
-{   
+{
     uint64_t    Ignored_1:3;               // 2 bits ignored
-    uint64_t    PageLevelWriteThrough:1; // indirectly determines the memory type used to access the PML4 table during linear-address translation      
-    uint64_t    CacheDisabled:1;         // indirectly determines the memory type used to access the PML4 table during linear-address translation 
+    uint64_t    PageLevelWriteThrough:1; // indirectly determines the memory type used to access the PML4 table during linear-address translation
+    uint64_t    CacheDisabled:1;         // indirectly determines the memory type used to access the PML4 table during linear-address translation
     uint64_t    Ignored_2:7;               // Bits Ignored
     uint64_t    PML4BaseAddress:40;      // Physical address of the 4-KByte aligned PML4 table used for linear-address translation
     uint64_t    MustBeZero:12;
@@ -195,4 +200,4 @@ typedef enum SYSTEM_CALLS {
 
 
 
-#endif 
+#endif

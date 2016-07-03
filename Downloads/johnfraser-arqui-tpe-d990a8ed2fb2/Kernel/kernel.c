@@ -85,13 +85,14 @@ void * initializeKernelBinary()
 }
 
 int main()
-{	
+{
 	pagingInit();
+	memInit();
+	pageManagementInit();
+	//kKBInitialize();
+	//kInitializeDisplay();
+	//kIDTInitialize();
 
-	kKBInitialize();
-	kInitializeDisplay();
-	kIDTInitialize();
-	//pageEnable();
 
 	((EntryPoint)sampleCodeModuleAddress)();
 
