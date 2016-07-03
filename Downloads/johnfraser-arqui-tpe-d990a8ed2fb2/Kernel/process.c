@@ -1,26 +1,57 @@
 #include "process.h"
+#include <naiveConsole.h>
 
 void * userStackPage;
 void * kernelStackPage;
 
 
-process* initProcess(void * entryPoint){
-	process * newProcess = (process *) kmalloc(sizeof(process));
+static int pid = 1;
 
+
+process* initProcess(void * entryPoint, char *name){
+	process * newProcess = (process *) kmalloc(sizeof(process));
+	//	ncPrint("  Entre a crear un proces");
 	//allocate space for userStack and kernelStack
-	userStackPage = pageAlloc();//pa.alloc(1); VER
-	kernelStackPage = pageAlloc();//pa.alloc(1); VER
+	userStackPage = (void *)pageAlloc();//pa.alloc(1); VER
+	kernelStackPage = (void*)pageAlloc();//pa.alloc(1); VER
 	newProcess->entryPoint = entryPoint;
+
+
+
+
 
 	//page allocating assignment
 	newProcess->userStack = toStackAddress(userStackPage);
 	newProcess->kernelStack = toStackAddress(kernelStackPage);
+	newProcess->PID = getPID();
+	/*
+	ncNewline();
+	ncPrint("  User stack: 0x");
+	ncPrintHex((uint64_t)newProcess->userStack);
+
+	ncNewline();
+	ncPrint("  Kernel stack: 0x");
+	ncPrintHex((uint64_t)newProcess->kernelStack);
+
+	ncNewline();
+	ncPrint("  Process PID: ");
+	ncPrintDec((uint64_t)newProcess->PID);
+
+	ncNewline();
+	ncPrint("  EntryPoint: 0x");
+	ncPrintHex((uint64_t)newProcess->entryPoint);
+*/
 	return newProcess;
 }
 
 
+int getPID(){
+	int toReturn = pid;
+	pid++;
+	return toReturn;
+}
 void * toStackAddress(void * page){
-	return (uint8_t *)page +  0x1000 - 0x10; //PageAllocator::PageSize; VER
+	return page +  0x1000 - 0x10; //PageAllocator::PageSize; VER
 }
 
 

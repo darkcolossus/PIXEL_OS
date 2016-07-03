@@ -87,11 +87,59 @@ void * initializeKernelBinary()
 int main()
 {
 	pagingInit();
-	memInit();
+	//memInit();
 	pageManagementInit();
-	kKBInitialize();
-	kInitializeDisplay();
-	kIDTInitialize();
+	//kKBInitialize();
+	//kInitializeDisplay();
+	//kIDTInitialize();
+
+	process * p = initProcess(0x400000,"nombre");
+	process * p2 = initProcess(0x410000,"nombere");
+	process * p3 = initProcess(0x424000,"nombfgre");
+
+	process * p4 = initProcess(0x400000,"nombre");
+	process * p5 = initProcess(0x410000,"nombere");
+	process * p6 = initProcess(0x424000,"nombfgre");
+
+		addProcess(p);
+		addProcess(p2);
+		addProcess(p3);
+		addProcess(p4);
+		addProcess(p5);
+		addProcess(p6);
+
+		printALl();
+			//ncPrint("antes ");
+		//addProcess(p2);
+		//	ncPrint("antes ");
+		//addProcess(p3);
+		//	ncPrint("antes ");
+		//printALl();
+		deleteProcess(p5);
+		printALl();
+		deleteProcess(p);
+			printALl();
+/*
+	ncNewline();
+	ncPrint("  main User stack: 0x");
+	ncPrintHex((uint64_t)p->userStack);
+
+	ncNewline();
+	ncPrint("  main Kernel stack: 0x");
+	ncPrintHex((uint64_t)p->kernelStack);
+
+	ncNewline();
+	ncPrint("  main Process PID: ");
+	ncPrintDec((uint64_t)p->PID);
+
+	ncNewline();
+	ncPrint(" main EntryPoint: 0x");
+	ncPrintHex((uint64_t)p->entryPoint);
+*/
+
+
+
+
 
 
 	((EntryPoint)sampleCodeModuleAddress)();

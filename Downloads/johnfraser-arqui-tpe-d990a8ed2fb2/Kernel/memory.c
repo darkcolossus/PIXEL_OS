@@ -21,7 +21,7 @@ static void * lastMalloc;
 struct buddy * b ;
 
 
-
+/*
 void memInit(){
 	b = buddyMemNew(22);
 
@@ -61,26 +61,33 @@ void memInit(){
 	ncNewline();
 
 	ncPrint("Hola estoy aca");
-
+	
 }
-
+*/
+/*
 void * kmalloc(int len){
+	if(len <=0){
+		ncPrint("  Nico se la re come doblada");
+	}
 	int offset = memAlloc(b,len);
-	//ncPrintDec((uint64_t)offset);
+	//ncPrintHex((uint64_t)offset);
 	//ncNewline();
 	if(offset != -1 ){
 		return offset + (6*0x100000);
+	}else{
+		ncPrint("  ERROR!! offset!");
 	}
 }
-
+*/
 void kfree( void * m ){
 	int offset=	((uint64_t)m )-(6*0x100000);
 	memFree(b,offset);
 }
-void * malloc(int len){
+void * kmalloc(int len){
 	lastMalloc = mallocBuff;
 	if((mallocBuff + len)> stackStart){
 		// NO MORE MEMORTY
+		ncPrint("No more mem!");
 	}
 	mallocBuff += len * sizeof(char);
 
@@ -90,7 +97,7 @@ void * malloc(int len){
 void free(struct buddy * self){
 
 }
-
+/*
 struct buddy * buddyMemNew(int level) {
 	int size = 1 << level;
 	struct buddy * self = malloc(sizeof(struct buddy) + sizeof(uint8_t) * (size * 2 - 2));
@@ -99,7 +106,7 @@ struct buddy * buddyMemNew(int level) {
 	return self;
 }
 
-
+*/
 void buddyMemDelete(struct buddy * self) {
 
 }
@@ -293,6 +300,7 @@ void pageManagementInit(){
 
 
 //Testeo de paging
+/*
 uint64_t a = (uint64_t)pageAlloc();
 ncPrint("  Direccion: 0x");
 ncPrintHex(a);
@@ -302,6 +310,8 @@ a = (uint64_t)pageAlloc();
 ncPrint("  Direccion: 0x");
 ncPrintHex(a);
 ncNewline();
+
+*/
 }
 
 
