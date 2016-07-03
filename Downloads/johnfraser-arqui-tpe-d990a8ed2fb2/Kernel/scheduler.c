@@ -4,7 +4,7 @@ processNode * first ;
 processNode * last ;
 
 
-void addProcess(Process * p){
+void addProcess(process * p){
 	processNode * newProcess = (processNode *) kmalloc(sizeof(processNode));
 	newProcess->currentProcess = p;
 
@@ -22,7 +22,7 @@ void addProcess(Process * p){
 }
 
 
-processNode* deleteProcess(Process * p){
+processNode* deleteProcess(process * p){
 
    //start from the first process
     processNode* actual = first;
@@ -73,7 +73,7 @@ void scheduling(){
 
 
 void * contextSwitching(void * rsp){
-	Process * newProcess = first->currentProcess;
+	process * newProcess = first->currentProcess;
 	newProcess->userStack = rsp;
 	return newProcess->kernelStack;
 }

@@ -6,8 +6,8 @@
 #include "memory.h"
 
 void initScheduler();
-void addProcess(Process *p);
-processNode * deleteProcess(Process *p);
+void addProcess(process *p);
+processNode * deleteProcess(process *p);
 void scheduling();
 
 
