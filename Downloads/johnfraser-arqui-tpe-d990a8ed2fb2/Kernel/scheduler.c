@@ -1,12 +1,50 @@
 #include "scheduler.h"
-
-processNode * first ;
-processNode * last ;
+#include <naiveConsole.h>
+processNode * first = NULL;
+processNode * last =NULL ;
 
 
 void addProcess(process * p){
+	/*
+	ncPrint(" Entre a agregar un process al scheduller");
+	ncNewline();
+	ncPrint("  User stack: 0x");
+	ncPrintHex((uint64_t)p->userStack);
+
+	ncNewline();
+	ncPrint("  Kernel stack: 0x");
+	ncPrintHex((uint64_t)p->kernelStack);
+
+	ncNewline();
+	ncPrint("  Process PID: ");
+	ncPrintDec((uint64_t)p->PID);
+
+	ncNewline();
+	ncPrint("  EntryPoint: 0x");
+	ncPrintHex((uint64_t)p->entryPoint);
+
+	ncNewline();
+
+	ncPrint(" Entre a agregar un process al scheduller");
+	ncNewline();
+	ncPrint("  User stack: 0x");
+	ncPrintHex((uint64_t)p->userStack);
+
+	ncNewline();
+	ncPrint("  Kernel stack: 0x");
+	ncPrintHex((uint64_t)p->kernelStack);
+
+	ncNewline();
+	ncPrint("  Process PID: ");
+	ncPrintDec((uint64_t)p->PID);
+
+	ncNewline();
+	ncPrint("  EntryPoint: 0x");
+	ncPrintHex((uint64_t)p->entryPoint);
+	*/
 	processNode * newProcess = (processNode *) kmalloc(sizeof(processNode));
 	newProcess->currentProcess = p;
+
 
 	if(first == NULL){
 		last = newProcess;
@@ -73,6 +111,21 @@ void scheduling(){
 	first = first->next;
 }
 
+void printALl(){
+   //start from the beginning
+   struct processNode *ptr = first;
+
+   //navigate till the end of the list
+
+   while(ptr != NULL){
+		 ncPrint("Elemento: ");
+		 ncPrintDec(ptr->currentProcess->PID);
+		 ncNewline();
+      ptr = ptr->next;
+   }
+
+
+}
 
 void * contextSwitching(void * rsp){
 	process * newProcess = first->currentProcess;

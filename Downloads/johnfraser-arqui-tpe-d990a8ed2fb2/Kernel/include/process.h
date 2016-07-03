@@ -6,7 +6,7 @@
 #include "defines.h"
 
 
-process* initProcess(void * entryPoint);
+process* initProcess(void * entryPoint, char* name);
 
 void * toStackAddress(void * page);
 void * fillStackFrame(void * entryPoint, void * userStack);
