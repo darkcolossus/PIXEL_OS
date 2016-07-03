@@ -60,8 +60,7 @@ void addProcess(process * p){
 }
 
 
-processNode* deleteProcess(process * p){
-
+processNode* deleteProcess(int pid){
    //start from the first process
     processNode* actual = first;
     processNode* before = NULL;
@@ -72,7 +71,7 @@ processNode* deleteProcess(process * p){
    }
 
    //navigate through list
-   while(actual->currentProcess != p){
+   while(actual->currentProcess->PID != pid){
       //if it is last node
 
       if(actual->next == NULL){
@@ -111,7 +110,7 @@ void scheduling(){
 	first = first->next;
 }
 
-void printALl(){
+void printAll(){
    //start from the beginning
    struct processNode *ptr = first;
 

@@ -247,7 +247,10 @@ typedef enum SYSTEM_CALLS {
         CLEAR_SCREEN = 0x2,
         SET_SOUND = 0x5,
         SET_TIMER_HANDLER = 0x6,
-        BEEP = 0x7
+        BEEP = 0x7,
+        CREATE_PROCESS = 0x8,
+        DELETE_PROCESS = 0x9,
+        LIST_PROCESSES = 0xA
 } SYSCALLS;
 
 #define RTC_PORT		0x70

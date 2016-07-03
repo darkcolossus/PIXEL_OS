@@ -7,7 +7,7 @@
 
 void initScheduler();
 void addProcess(process *p);
-processNode * deleteProcess(process *p);
+processNode * deleteProcess(int pid);
 void scheduling();
 
 

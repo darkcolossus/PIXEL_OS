@@ -89,10 +89,12 @@ int main()
 	pagingInit();
 	//memInit();
 	pageManagementInit();
-	//kKBInitialize();
-	//kInitializeDisplay();
-	//kIDTInitialize();
+	kKBInitialize();
+	kInitializeDisplay();
+	kIDTInitialize();
 
+
+/*
 	process * p = initProcess(0x400000,"nombre");
 	process * p2 = initProcess(0x410000,"nombere");
 	process * p3 = initProcess(0x424000,"nombfgre");
@@ -119,6 +121,7 @@ int main()
 		printALl();
 		deleteProcess(p);
 			printALl();
+			*/
 /*
 	ncNewline();
 	ncPrint("  main User stack: 0x");

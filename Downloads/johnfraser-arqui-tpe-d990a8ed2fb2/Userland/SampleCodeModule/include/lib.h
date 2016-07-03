@@ -22,6 +22,7 @@ char getChar();
 int numberLength (int i);
 int strlen(char* str);
 void itoa(int n, char* s);
+int atoi(char *str);
 void itoa_d(int n, char* s);
 bool strEquals(char* str1, char* str2);
 void split(char* buffer, char* command, char* arguments);

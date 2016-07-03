@@ -46,10 +46,18 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			_beep();
 			break;
 		}
-		/*
-		case CREATE_PROCESS:
-		break;
-		*/
+		case CREATE_PROCESS:{
+			addProcess(initProcess(0x400000, "prueba"));
+			break;	
+		}
+		case DELETE_PROCESS:{
+			deleteProcess((int)d);
+			break;
+		}
+		case LIST_PROCESSES:{
+			printAll();
+			break;	
+		}
 	}
 }
 

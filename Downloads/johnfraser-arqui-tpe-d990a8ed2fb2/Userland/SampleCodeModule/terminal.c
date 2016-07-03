@@ -191,13 +191,16 @@ int beep(char* args){
 }
 
 int createProcess(){
+	runSyscall(CREATE_PROCESS,0x0,0x0,0x0);
 	printf("El proceso se ha creado con exito\n");
 
 	return 0;
 }
 
 int deleteProcess(char* args){
+	runSyscall(DELETE_PROCESS,0x0,0x0,atoi(args));
 	printf("El proceso ha sido eliminado con exito\n");
+
 	return 0;
 }
 
