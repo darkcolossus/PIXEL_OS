@@ -27,13 +27,14 @@ void addFirstProcess(processQueue * pq ,process * p){
 
 	if(first == NULL){
 		last = newProcess;
+		first = newProcess;
 	}else{
 		first->previous = newProcess;
 	}
 
 	//point it to old first process
    newProcess->next = first;
-
+	 newProcess->previous = last;
    //point first to new first process
    first = newProcess;
 
@@ -41,7 +42,7 @@ void addFirstProcess(processQueue * pq ,process * p){
 	pq->last = last;
 }
 
-
+//No
 void addLastProcess(processQueue *pq,process * p){
    //create a link
    struct processNode *link = (struct processNode*) kmalloc(sizeof(struct processNode));
@@ -54,7 +55,7 @@ void addLastProcess(processQueue *pq,process * p){
       last = link;
    }else {
       //make link a new last link
-      last->next = link;     
+      last->next = link;
       //mark old last node as prev of new link
       link->previous = last;
    }
@@ -70,7 +71,7 @@ void addProcessToWaiting(process * p){
 }
 
 void addProcessToBlocked(process *p){
-	addLastProcess(blockedProcesses, p);	
+	addLastProcess(blockedProcesses, p);
 }
 
 int deleteProcessFromWaiting(int pid){
@@ -79,7 +80,7 @@ int deleteProcessFromWaiting(int pid){
 
 
 int deleteProcessFromBloqued(int pid){
-	return deleteProcess(blockedProcesses, pid);	
+	return deleteProcess(blockedProcesses, pid);
 }
 
 int deleteProcess(processQueue *pq,int pid){
@@ -184,7 +185,7 @@ processNode* removeProcess(processQueue *pq ,int pid){
    }else {
       //bypass the current process
       actual->previous->next = actual->next;
-   } 
+   }
 
    if(actual == last){
       //change last to point to prev process
@@ -194,7 +195,7 @@ processNode* removeProcess(processQueue *pq ,int pid){
    }
 	 pq->first = first;
  	 pq->last = last;
-   
+
    return actual;
 }
 
@@ -291,5 +292,3 @@ void * contextSwitching(void * rsp){
 
 	return p->kernelStack;
 }
-
-

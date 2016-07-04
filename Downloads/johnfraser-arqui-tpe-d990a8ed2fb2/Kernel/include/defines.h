@@ -192,7 +192,7 @@ typedef struct {
 
 
 typedef enum{
-    WAITING, 
+    WAITING,
     BLOCKED,
     RUNNING,
 }processStatus;
@@ -212,6 +212,7 @@ typedef struct processNode{
   process * currentProcess;
   processNode * next;
   processNode * previous;
+  processNode * currentProcess;
 }processNode;
 
 typedef struct processQueue{
