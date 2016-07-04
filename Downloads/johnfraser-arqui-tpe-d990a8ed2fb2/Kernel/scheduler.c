@@ -11,11 +11,13 @@ void initProcessQueues(){
 	waitingProcesses->size =0;
 	waitingProcesses->first = NULL;
 	waitingProcesses->last =NULL;
+	waitingProcesses->currentNode = NULL;
 
 	blockedProcesses = kmalloc(sizeof(struct processQueue));
 	blockedProcesses->size = 0;
 	blockedProcesses->first=NULL;
 	blockedProcesses->last =NULL;
+	blockedProcesses->currentNode = NULL;
 }
 
 void addFirstProcess(processQueue * pq ,process * p){
@@ -41,6 +43,7 @@ void addFirstProcess(processQueue * pq ,process * p){
 
 	pq->first = first;
 	pq->last = last;
+	pq->size ++;
 }
 
 //No usemos esta
@@ -68,11 +71,11 @@ void addLastProcess(processQueue *pq,process * p){
 }
 
 void addProcessToWaiting(process * p){
-	addLastProcess(waitingProcesses, p);
+	addFirstProcess(waitingProcesses, p);
 }
 
 void addProcessToBlocked(process *p){
-	addLastProcess(blockedProcesses, p);
+	addFirstProcess(blockedProcesses, p);
 }
 
 int deleteProcessFromWaiting(int pid){
@@ -104,10 +107,7 @@ void deleteProcessWrapper(int pid){
 		deleteProcessFromBloqued(pid);
 }
 
-void createIdleProcess(){
-	process *p = initProcess(NULL, "idle");
-	//TODO: TENEMOS QUE AGREGARLO A LA QUEUE WAITING
-}
+
 
 process * getProcess(processQueue *pq, 	int pid){
 	processNode * current;
@@ -143,7 +143,7 @@ process * getProcessFromAll(int pid){
 }
 
 process * getProcessFromWaiting(){
-	return waitingProcesses->first->currentProcess;
+	return waitingProcesses->currentNode->currentProcess;
 }
 
 void blockProcess(int pid){
@@ -211,13 +211,13 @@ process * removeProcessFromBloqued(uint64_t pid){
 process * scheduling(){
 	process * p;
 
-	if(waitingProcesses->first !=NULL){
-		if(isIdle(waitingProcesses->first->next)){
-			waitingProcesses->first = waitingProcesses->first->next;
+	if(waitingProcesses->currentNode !=NULL){
+		if(isIdle(waitingProcesses->currentNode->next->currentProcess)){
+			waitingProcesses->currentNode = waitingProcesses->currentNode->next;
 		}
 
-		p = waitingProcesses->first->next->currentProcess;
-		waitingProcesses->first = waitingProcesses->first->next;
+		p = waitingProcesses->currentNode->next->currentProcess;
+		waitingProcesses->currentNode = waitingProcesses->currentNode->next;
 		last = p;
 
 		return p;
@@ -229,20 +229,28 @@ process * scheduling(){
 int isIdle(process *p){
 	return p->PID == 1;
 }
-
+void printProcesses(){
+	//ncPrint("asdfsadf");
+	printAll(waitingProcesses);
+};
 void printAll(processQueue * pq){
+		//kputString("estoy en printall");
    //start from the beginning
-
-    processNode *ptr = pq->first;
-
+	 if(pq == NULL)
+	 	return;
+  processNode *ptr = pq->first;
+		if(ptr == NULL)
+			return;
    //navigate till the end of the list
  	kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
 	kputNewLine();
-	int i=0;
-   while(i < 2){
-   		 kputString("EL NOMBRE DEL PROCESO ES:");
-   		 kputString(ptr->currentProcess->name);
-   		 kputNewLine();
+
+   //while(ptr != NULL){
+	 int i;
+	 for(i=0;i<pq->size;i++){
+   		 //kputString("EL NOMBRE DEL PROCESO ES:");
+   		 //kputString(ptr->currentProcess->name);
+   		 //kputNewLine();
 		 int pid = ptr->currentProcess->PID;
 		 char * str[100];
 		 //kitoa(pid,str);
@@ -251,10 +259,11 @@ void printAll(processQueue * pq){
 		 kputString(ptr->currentProcess->name);
 		 //kputString(str);
        kputString("\t\t");
-       kputString("RUNNING");
+				kprintDec(ptr->currentProcess->status);
+       //kputString("RUNNING");
        //kputString("RUNNING"); ACA VA EL ESTADO
        kputString("\t\t");
-       kputString("SHELL");
+       //kputString("SHELL");
        kputString("\t\t\t\t");
        kprintHex((uint64_t)ptr->currentProcess->userStack);
 		 /*

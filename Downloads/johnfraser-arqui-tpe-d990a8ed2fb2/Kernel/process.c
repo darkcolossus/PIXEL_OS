@@ -10,6 +10,7 @@ static int pid = 1;
 
 
 process* initProcess(EntryPoint entryPoint, char *name){
+
 	process * newProcess = (process *) kmalloc(sizeof(process));
 	//	ncPrint("  Entre a crear un proces");
 	//allocate space for userStack and kernelStack
@@ -17,16 +18,14 @@ process* initProcess(EntryPoint entryPoint, char *name){
 	kernelStackPage = (void*)pageAlloc();//pa.alloc(1); VER
 	newProcess->entryPoint = entryPoint;
 	int length = kstrlen(name);
+	newProcess->name = kmalloc(sizeof(char) * length +1);
 	memcpy(newProcess->name, name, length);
-
-
-
-
 
 	//page allocating assignment
 	newProcess->userStack = toStackAddress(userStackPage);
 	newProcess->kernelStack = toStackAddress(kernelStackPage);
 	newProcess->PID = getPID();
+	newProcess->status = WAITING;
 	/*
 	ncNewline();
 	ncPrint("  User stack: 0x");
@@ -97,8 +96,16 @@ static uint64_t shellProcess(){
   }
 }
 
+void createIdleProcess(){
+	process *p = initProcess(NULL, "idle");
+	//TODO: TENEMOS QUE AGREGARLO A LA QUEUE WAITING
+	ncPrint(p->name);
+	ncNewline();
+	addProcessToWaiting(p);
+}
 
 void initializeRequiredProcesses(){
+	createIdleProcess();
 	process * shellInit = initProcess(shellProcess,"Shell inicial");
-	//addProcess(shellInit);
+	addProcessToWaiting(shellInit);
 }

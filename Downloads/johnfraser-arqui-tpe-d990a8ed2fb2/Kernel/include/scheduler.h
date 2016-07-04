@@ -12,7 +12,6 @@ void addProcessToWaiting(process * p);
 void addProcessToBlocked(process *p);
 int deleteProcessFromWaiting(int pid);
 int deleteProcessFromBloqued(int pid);
-void createIdleProcess();
 process * getProcess(processQueue *pq, 	int pid);
 process * getProcessFromAll(int pid);
 void blockProcess(int pid);

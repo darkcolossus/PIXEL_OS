@@ -55,7 +55,7 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			break;
 		}
 		case LIST_PROCESSES:{
-			printAll();
+			printProcesses();
 			break;
 		}
 	}

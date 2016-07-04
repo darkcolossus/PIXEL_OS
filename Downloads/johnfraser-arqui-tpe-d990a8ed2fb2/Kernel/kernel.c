@@ -92,6 +92,7 @@ int main()
 	kKBInitialize();
 	kInitializeDisplay();
 	kIDTInitialize();
+  initProcessQueues();
 	initializeRequiredProcesses();
 
 /*

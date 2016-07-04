@@ -4,10 +4,11 @@
 
 #include "memory.h"
 #include "defines.h"
+#include "stddef.h"
 
 
 process* initProcess(EntryPoint entryPoint, char* name);
-
+void createIdleProcess();
 void * toStackAddress(void * page);
 void * fillStackFrame(void * entryPoint, void * userStack);
 void initializeRequiredProcesses();
