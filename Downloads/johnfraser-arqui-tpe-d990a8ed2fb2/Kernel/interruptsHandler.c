@@ -51,7 +51,7 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			break;
 		}
 		case DELETE_PROCESS:{
-			deleteProcess((int)d);
+			deleteProcessWrapper((int)d);
 			break;
 		}
 		case LIST_PROCESSES:{

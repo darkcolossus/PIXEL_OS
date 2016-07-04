@@ -191,13 +191,19 @@ typedef struct {
 
 
 
+typedef enum{
+    WAITING, 
+    BLOCKED,
+    RUNNING,
+}processStatus;
+
 typedef struct{
     void * userStack;
 	void * kernelStack;
 	void * entryPoint;
     int PID;
     char * name;
-    char * status;
+    processStatus status;
 }process;
 
 typedef struct processNode processNode;
