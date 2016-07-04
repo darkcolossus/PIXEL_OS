@@ -20,7 +20,7 @@ static const uint64_t PageSize = 0x1000;
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
-typedef int (*EntryPoint)();
+
 
 
 void clearBSS(void * bssAddress, uint64_t bssSize)
@@ -92,7 +92,7 @@ int main()
 	kKBInitialize();
 	kInitializeDisplay();
 	kIDTInitialize();
-
+	initializeRequiredProcesses();
 
 /*
 	process * p = initProcess(0x400000,"nombre");

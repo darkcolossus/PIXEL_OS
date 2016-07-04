@@ -8,6 +8,8 @@ typedef unsigned char byte;
 typedef unsigned short word;
 typedef unsigned int dword;
 typedef unsigned long ddword;
+typedef int (*EntryPoint)();
+
 
 #define TRUE 1
 #define FALSE 0

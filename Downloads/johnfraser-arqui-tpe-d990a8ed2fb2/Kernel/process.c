@@ -1,21 +1,24 @@
 #include "process.h"
+#include "defines.h"
 #include <naiveConsole.h>
 
 void * userStackPage;
 void * kernelStackPage;
-
+static void * const shellCodeModuleAddress = (void*)0x400000;
 
 static int pid = 1;
 
 
-process* initProcess(void * entryPoint, char *name){
+process* initProcess(EntryPoint entryPoint, char *name){
 	process * newProcess = (process *) kmalloc(sizeof(process));
 	//	ncPrint("  Entre a crear un proces");
 	//allocate space for userStack and kernelStack
 	userStackPage = (void *)pageAlloc();//pa.alloc(1); VER
 	kernelStackPage = (void*)pageAlloc();//pa.alloc(1); VER
 	newProcess->entryPoint = entryPoint;
-
+	int length = kstrlen(name);
+	memcpy(newProcess->name, name, length);
+	
 
 
 
@@ -83,4 +86,19 @@ void * fillStackFrame(void * entryPoint, void * userStack){
 	frame->base =	0x000;
 
 	return frame;
+}
+static uint64_t shellProcess(){
+  while(1){
+
+
+
+    ((EntryPoint)shellCodeModuleAddress)();
+
+  }
+}
+
+
+void initializeRequiredProcesses(){
+	process * shellInit = initProcess(shellProcess,"Shell inicial");
+	addProcess(shellInit);
 }

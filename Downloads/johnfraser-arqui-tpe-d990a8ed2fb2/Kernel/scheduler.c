@@ -115,12 +115,22 @@ void printAll(){
    struct processNode *ptr = first;
 
    //navigate till the end of the list
-
+ 	kputString("PID			Name			State			Foreground			Memory");
+	kputNewLine();
    while(ptr != NULL){
+		 int pid = ptr->currentProcess->PID;
+		 char * str[100];
+		 kitoa(pid,str);
+		 kstrcat(str, "			");
+		 kstrcat(str, ptr->currentProcess->name);
+		 kputString(str);
+		 /*
 		 ncPrint("Elemento: ");
 		 ncPrintDec(ptr->currentProcess->PID);
 		 ncNewline();
-      ptr = ptr->next;
+		 */
+		 kputNewLine();
+			ptr = ptr->next;
    }
 
 

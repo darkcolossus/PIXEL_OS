@@ -206,6 +206,6 @@ int deleteProcess(char* args){
 
 int listProcesses(){
 	runSyscall(LIST_PROCESSES,0x0,0x0,0x0);
-	printf("Listando procesos...\n");
+	//printf("Listando procesos...\n");
 	return 0;
 }

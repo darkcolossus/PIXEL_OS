@@ -6,9 +6,10 @@
 #include "defines.h"
 
 
-process* initProcess(void * entryPoint, char* name);
+process* initProcess(EntryPoint entryPoint, char* name);
 
 void * toStackAddress(void * page);
 void * fillStackFrame(void * entryPoint, void * userStack);
+void initializeRequiredProcesses();
 
 #endif
