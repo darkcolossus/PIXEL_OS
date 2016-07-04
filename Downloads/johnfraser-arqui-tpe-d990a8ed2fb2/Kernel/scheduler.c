@@ -28,6 +28,7 @@ void addFirstProcess(processQueue * pq ,process * p){
 	if(first == NULL){
 		last = newProcess;
 		first = newProcess;
+		pq->currentNode =  newProcess;
 	}else{
 		first->previous = newProcess;
 	}
