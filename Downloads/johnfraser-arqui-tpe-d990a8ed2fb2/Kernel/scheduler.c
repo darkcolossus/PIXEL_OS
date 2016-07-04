@@ -1,50 +1,28 @@
 #include "scheduler.h"
 #include <naiveConsole.h>
-processNode * first = NULL;
-processNode * last =NULL ;
+//processNode * first = NULL;
+//processNode * last =NULL ;
+static processQueue * waitingProcesses;
+static processQueue * bloquedProcesses;
 
+void initProcessQueues(){
+	waitingProcesses = kmalloc(sizeof(struct processQueue));
+	waitingProcesses->size =0;
+	waitingProcesses->first = NULL;
+	waitingProcesses->last =NULL;
 
-void addProcess(process * p){
-	/*
-	ncPrint(" Entre a agregar un process al scheduller");
-	ncNewline();
-	ncPrint("  User stack: 0x");
-	ncPrintHex((uint64_t)p->userStack);
+	bloquedProcesses = kmalloc(sizeof(struct processQueue));
+	bloquedProcesses->size = 0;
+	bloquedProcesses->first=NULL;
+	bloquedProcesses->last =NULL;
+}
 
-	ncNewline();
-	ncPrint("  Kernel stack: 0x");
-	ncPrintHex((uint64_t)p->kernelStack);
+void addFirstProcess(processQueue * pq ,process * p){
 
-	ncNewline();
-	ncPrint("  Process PID: ");
-	ncPrintDec((uint64_t)p->PID);
-
-	ncNewline();
-	ncPrint("  EntryPoint: 0x");
-	ncPrintHex((uint64_t)p->entryPoint);
-
-	ncNewline();
-
-	ncPrint(" Entre a agregar un process al scheduller");
-	ncNewline();
-	ncPrint("  User stack: 0x");
-	ncPrintHex((uint64_t)p->userStack);
-
-	ncNewline();
-	ncPrint("  Kernel stack: 0x");
-	ncPrintHex((uint64_t)p->kernelStack);
-
-	ncNewline();
-	ncPrint("  Process PID: ");
-	ncPrintDec((uint64_t)p->PID);
-
-	ncNewline();
-	ncPrint("  EntryPoint: 0x");
-	ncPrintHex((uint64_t)p->entryPoint);
-	*/
 	processNode * newProcess = (processNode *) kmalloc(sizeof(processNode));
 	newProcess->currentProcess = p;
-
+	processNode * first = pq->first;
+	processNode * last = pq->last;
 
 	if(first == NULL){
 		last = newProcess;
@@ -57,11 +35,16 @@ void addProcess(process * p){
 
    //point first to new first process
    first = newProcess;
+
+	pq->first = first;
+	pq->last = last;
 }
 
 
-processNode* deleteProcess(int pid){
+processNode* deleteProcess(processQueue *pq ,int pid){
    //start from the first process
+	processNode * first = pq->first;
+	processNode * last = pq->last;
     processNode* actual = first;
     processNode* before = NULL;
 
@@ -100,12 +83,13 @@ processNode* deleteProcess(int pid){
    }else {
       actual->next->previous = actual->previous;
    }
+	 pq->first = first;
+ 	 pq->last = last;
    pageFree(actual->currentProcess->userStack);
    pageFree(actual->currentProcess->kernelStack);
    kfree(actual);
    return actual;
 }
-
 void scheduling(){
 	first = first->next;
 }
@@ -143,7 +127,6 @@ void printAll(){
 		 */
 		 kputNewLine();
 			ptr = ptr->next;
-		 i++;
    }
 
 

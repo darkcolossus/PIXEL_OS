@@ -208,6 +208,12 @@ typedef struct processNode{
   processNode * previous;
 }processNode;
 
+typedef struct processQueue{
+  processNode * first;
+  processNode * last;
+  int size;
+}processQueue;
+
 /*END OF SCHEDULER*/
 
 typedef struct
