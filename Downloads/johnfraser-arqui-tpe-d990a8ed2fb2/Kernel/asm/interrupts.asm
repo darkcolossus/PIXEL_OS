@@ -46,12 +46,25 @@ kSetHandler:
 ;------------;
 
 TTInterruptHandler:
-	cli
+
+;	cli
+;	call TTHandler
+;	mov 	al, 0x20
+;	out 	0x20, al
+;	sti
+;	iretq
+
+	pushaq
+	mov rdi, rsp
 	call TTHandler
-	mov 	al, 0x20
-	out 	0x20, al
-	sti
+	cmp rax, 0
+	je .dero
+	mov rsp, rax
+	
+.dero:
+	popaq
 	iretq
+
 
 keyboardInterruptHandler:
 	cli
@@ -68,4 +81,3 @@ syscallInterruptHandler:
 	out     0x20, al
 	sti
 	iretq
-

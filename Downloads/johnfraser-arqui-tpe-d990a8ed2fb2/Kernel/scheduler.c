@@ -278,15 +278,20 @@ void printAll(processQueue * pq){
 
 }
 
+process * getLast(){
+	return last;
+}
 
 void * contextSwitching(void * rsp){
-	process * p = getProcessFromWaiting();
+	process * p = getLast;
+	if(p==NULL)
+	 	p = getProcessFromWaiting();
 
 	if(p == NULL)
 		return 0;
 
 	//TODO: AGUANTE BOCA
-	p->userStack = rsp;
+	p->kernelStack = rsp;
 
 
 	if(p->status != BLOCKED){
