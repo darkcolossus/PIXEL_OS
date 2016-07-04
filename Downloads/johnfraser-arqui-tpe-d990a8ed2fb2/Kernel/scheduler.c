@@ -2,6 +2,7 @@
 #include <naiveConsole.h>
 //processNode * first = NULL;
 //processNode * last =NULL ;
+
 static processQueue * waitingProcesses;
 static processQueue * blockedProcesses;
 process * last;
@@ -22,6 +23,7 @@ void initProcessQueues(){
 
 void addFirstProcess(processQueue * pq ,process * p){
 
+	kDisableInterrupts();
 	processNode * newProcess = (processNode *) kmalloc(sizeof(processNode));
 	newProcess->currentProcess = p;
 	processNode * first = pq->first;
@@ -44,10 +46,12 @@ void addFirstProcess(processQueue * pq ,process * p){
 	pq->first = first;
 	pq->last = last;
 	pq->size ++;
+	kEnableInterrupts();
 }
 
 //No usemos esta
 void addLastProcess(processQueue *pq,process * p){
+	kDisableInterrupts();
    //create a link
    struct processNode *link = (struct processNode*) kmalloc(sizeof(struct processNode));
    link->currentProcess = p;
@@ -68,6 +72,7 @@ void addLastProcess(processQueue *pq,process * p){
    last = link;
    pq->first = first;
    pq-> last = last;
+   kDisableInterrupts();
 }
 
 void addProcessToWaiting(process * p){
@@ -101,10 +106,11 @@ int deleteProcess(processQueue *pq,int pid){
 }
 
 void deleteProcessWrapper(int pid){
-
+	kDisableInterrupts();
 	int num = deleteProcessFromWaiting(pid);
 	if (num == -1)
 		deleteProcessFromBloqued(pid);
+	kEnableInterrupts();
 }
 
 
@@ -236,6 +242,7 @@ void printProcesses(){
 void printAll(processQueue * pq){
 		//kputString("estoy en printall");
    //start from the beginning
+	kDisableInterrupts();
 	 if(pq == NULL)
 	 	return;
   processNode *ptr = pq->first;
@@ -275,7 +282,7 @@ void printAll(processQueue * pq){
 			ptr = ptr->next;
    }
 
-
+   kEnableInterrupts();
 }
 
 process * getLast(){
