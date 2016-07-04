@@ -212,7 +212,7 @@ typedef struct processNode{
   process * currentProcess;
   processNode * next;
   processNode * previous;
-  processNode * currentProcess;
+  processNode * currentNode;
 }processNode;
 
 typedef struct processQueue{

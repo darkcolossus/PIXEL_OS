@@ -42,7 +42,7 @@ void addFirstProcess(processQueue * pq ,process * p){
 	pq->last = last;
 }
 
-//No
+//No usemos esta
 void addLastProcess(processQueue *pq,process * p){
    //create a link
    struct processNode *link = (struct processNode*) kmalloc(sizeof(struct processNode));
