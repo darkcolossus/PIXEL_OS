@@ -47,8 +47,8 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			break;
 		}
 		case CREATE_PROCESS:{
-			addProcess(initProcess(0x400000, "prueba"));
-			break;	
+			//addProcess(initProcess(0x400000, "prueba"));
+			break;
 		}
 		case DELETE_PROCESS:{
 			deleteProcess((int)d);
@@ -56,7 +56,7 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 		}
 		case LIST_PROCESSES:{
 			printAll();
-			break;	
+			break;
 		}
 	}
 }

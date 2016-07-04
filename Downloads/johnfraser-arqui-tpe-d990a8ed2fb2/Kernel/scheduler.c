@@ -90,13 +90,15 @@ processNode* deleteProcess(processQueue *pq ,int pid){
    kfree(actual);
    return actual;
 }
+/*
 void scheduling(){
 	first = first->next;
 }
+*/
 
-void printAll(){
+void printAll(processQueue *pq){
    //start from the beginning
-    processNode *ptr = first;
+  processNode *ptr = pq->first;
 
    //navigate till the end of the list
  	kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
@@ -131,9 +133,10 @@ void printAll(){
 
 
 }
-
+/*
 void * contextSwitching(void * rsp){
 	process * newProcess = first->currentProcess;
 	newProcess->userStack = rsp;
 	return newProcess->kernelStack;
 }
+*/

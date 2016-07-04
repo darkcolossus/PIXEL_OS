@@ -7,7 +7,7 @@
 
 void initScheduler();
 void addFirstProcess(processQueue * pq,process *p);
-processNode * deleteProcess(int pid);
+processNode* deleteProcess(processQueue *pq ,int pid);
 void scheduling();
 
 

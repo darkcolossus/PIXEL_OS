@@ -18,7 +18,7 @@ process* initProcess(EntryPoint entryPoint, char *name){
 	newProcess->entryPoint = entryPoint;
 	int length = kstrlen(name);
 	memcpy(newProcess->name, name, length);
-	
+
 
 
 
@@ -100,5 +100,5 @@ static uint64_t shellProcess(){
 
 void initializeRequiredProcesses(){
 	process * shellInit = initProcess(shellProcess,"Shell inicial");
-	addProcess(shellInit);
+	//addProcess(shellInit);
 }
