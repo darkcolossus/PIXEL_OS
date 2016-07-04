@@ -112,18 +112,30 @@ void scheduling(){
 
 void printAll(){
    //start from the beginning
-   struct processNode *ptr = first;
+    processNode *ptr = first;
 
    //navigate till the end of the list
- 	kputString("PID			Name			State			Foreground			Memory");
+ 	kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
 	kputNewLine();
-   while(ptr != NULL){
+	int i=0;
+   while(i < 2){
+   		 kputString("EL NOMBRE DEL PROCESO ES:");
+   		 kputString(ptr->currentProcess->name);
+   		 kputNewLine();
 		 int pid = ptr->currentProcess->PID;
 		 char * str[100];
-		 kitoa(pid,str);
-		 kstrcat(str, "			");
-		 kstrcat(str, ptr->currentProcess->name);
-		 kputString(str);
+		 //kitoa(pid,str);
+       kprintDec(pid);
+       kputString("\t\t");
+		 kputString(ptr->currentProcess->name);
+		 //kputString(str);
+       kputString("\t\t");
+       kputString("RUNNING");
+       //kputString("RUNNING"); ACA VA EL ESTADO
+       kputString("\t\t");
+       kputString("SHELL");
+       kputString("\t\t\t\t");
+       kprintHex((uint64_t)ptr->currentProcess->userStack);
 		 /*
 		 ncPrint("Elemento: ");
 		 ncPrintDec(ptr->currentProcess->PID);
@@ -131,6 +143,7 @@ void printAll(){
 		 */
 		 kputNewLine();
 			ptr = ptr->next;
+		 i++;
    }
 
 

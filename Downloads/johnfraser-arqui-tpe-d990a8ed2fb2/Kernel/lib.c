@@ -2,6 +2,10 @@
 #include "include/display.h"
 #include "include/keyboard.h"
 
+
+static char buffer[64] = { '0' };
+
+
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;
@@ -141,4 +145,50 @@ void kRead(char* buffer){
 	return;
 }
 
+void kprintDec(uint64_t value)
+{
+	kprintBase(value, 10);
+}
 
+void kprintHex(uint64_t value)
+{
+	kprintBase(value, 16);
+}
+void kprintBase(uint64_t value, uint32_t base)
+{
+    kuintToBase(value, buffer, base);
+    kputString(buffer);
+}
+
+static uint32_t kuintToBase(uint64_t value, char * buffer, uint32_t base)
+{
+	char *p = buffer;
+	char *p1, *p2;
+	uint32_t digits = 0;
+
+	//Calculate characters for each digit
+	do
+	{
+		uint32_t remainder = value % base;
+		*p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+		digits++;
+	}
+	while (value /= base);
+
+	// Terminate string in buffer.
+	*p = 0;
+
+	//Reverse string in buffer.
+	p1 = buffer;
+	p2 = p - 1;
+	while (p1 < p2)
+	{
+		char tmp = *p1;
+		*p1 = *p2;
+		*p2 = tmp;
+		p1++;
+		p2--;
+	}
+
+	return digits;
+}

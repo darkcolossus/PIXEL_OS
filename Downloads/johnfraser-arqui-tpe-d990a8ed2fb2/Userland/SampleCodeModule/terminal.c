@@ -100,7 +100,7 @@ void initCommandList(){
 	commands[9].use = "Delete a process, specified by process id.";
 	commands[9].hidden = FALSE;
 
-	commands[10].key = "list_processes";
+	commands[10].key = "ps";
 	commands[10].handler = &listProcesses;
 	commands[10].use = "Show the list of processes.";
 	commands[10].hidden = FALSE;

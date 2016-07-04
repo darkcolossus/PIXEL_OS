@@ -13,6 +13,10 @@ char* kstrcat(char *dest, const char *src);
 void kitoa(int n, char s[]);
 void kitoa_d(int n, char s[]);
 void kreverse(char s[]);
+void kprintHex(uint64_t value);
+void kprintDec(uint64_t value);
+void kprintBase(uint64_t value, uint32_t base);
+static uint32_t kuintToBase(uint64_t value, char * buffer, uint32_t base);
 
 
 void kWrite(char* str, int length);
