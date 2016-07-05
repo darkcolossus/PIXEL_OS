@@ -17,6 +17,8 @@ int beep(char* args);
 int createProcess();
 int deleteProcess(char * args);
 int listProcesses();
+int ipc();
+int game();
 
 extern void _beep();
 
@@ -104,6 +106,17 @@ void initCommandList(){
 	commands[10].handler = &listProcesses;
 	commands[10].use = "Show the list of processes.";
 	commands[10].hidden = FALSE;
+
+	commands[11].key = "ipc";
+	commands[11].handler = &ipc;
+	commands[11].use = "Show the ipc structure.";
+	commands[11].hidden = FALSE;
+
+	commands[12].key = "game";
+	commands[12].handler = &game;
+	commands[12].use = "Play this funny game.";
+	commands[12].hidden = FALSE;
+
 
 }
 
@@ -207,5 +220,40 @@ int deleteProcess(char* args){
 int listProcesses(){
 	runSyscall(LIST_PROCESSES,0x0,0x0,0x0);
 	//printf("Listando procesos...\n");
+	return 0;
+}
+
+int ipc(){
+	printf("La estructura IPC implementada es: MessageQueue\n");
+	printf("Las estructuras utilizadas son:\n");
+	printf("===========================\n");
+	printf("|| message{              ||\n");
+	printf("||    void * msg;        ||\n");
+	printf("||    uint64_t msgSize;  ||\n");
+	printf("||    uint64_t senderId; ||\n");
+	printf("||    message * next;    ||\n");
+	printf("||  }                    ||\n");
+	printf("===========================\n");
+	printf("============================\n");
+	printf("|| msgQueueNode           ||\n");
+	printf("|| {                      ||\n");
+	printf("||    uint64_t id;        ||\n");
+	printf("||    message * msgs;     ||\n");
+	printf("||    message * lastmsg;  ||\n");
+	printf("||    msgQueueNode * next;||\n");
+	printf("||  }                     ||\n");
+	printf("============================\n");
+	printf("=============================\n");
+	printf("|| messageQueue            ||\n");
+	printf("|| {                       ||\n");
+	printf("||    msgQueueNode * first;||\n");
+	printf("||    uint64_t size;       ||\n");
+	printf("||  }                      ||\n");
+	printf("=============================\n");
+	return 0;
+}
+
+int game(){
+	printf("Listo para jugar?\n");
 	return 0;
 }

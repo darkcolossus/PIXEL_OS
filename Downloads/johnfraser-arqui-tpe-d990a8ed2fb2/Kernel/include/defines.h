@@ -255,6 +255,34 @@ typedef struct
 
 /*END OF MEMORY */
 
+/*IPC*/
+typedef struct message message;
+
+typedef struct message{
+    void * msg;
+    uint64_t msgSize;
+    uint64_t senderId;
+    message * next;
+}message;
+
+typedef struct msgQueueNode msgQueueNode;
+
+typedef struct msgQueueNode{
+    uint64_t id;
+    message * msgs;
+    message * lastmsg;
+    msgQueueNode * next;
+}msgQueueNode;
+
+
+
+typedef struct{
+    msgQueueNode * first;
+    uint64_t size;
+}messageQueue;
+
+/*END OF IPC*/
+
 
 typedef enum SYSTEM_CALLS {
         WRITE = 0x4,

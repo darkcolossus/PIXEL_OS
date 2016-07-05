@@ -8,7 +8,7 @@ typedef unsigned char bool;
 #define TRUE 1
 #define FALSE 0
 
-#define TOTAL_COMMANDS 11
+#define TOTAL_COMMANDS 13
 
 #define MAX_COMMAND_LENGTH 50
 #define MAX_ARGUMENTS_LENGTH 150
