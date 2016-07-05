@@ -7,10 +7,10 @@
 #include "stddef.h"
 
 
-process* initProcess(EntryPoint entryPoint, char* name);
+process* initProcess(EntryPoint entryPoint, char* name,uint64_t argc,char* argv[]);
 void createIdleProcess();
 void * toStackAddress(void * page);
-void * fillStackFrame(void * entryPoint, void * userStack);
+void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,char argv[]);
 void initializeRequiredProcesses();
 
 #endif
