@@ -19,8 +19,17 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+void * kernelStack = NULL;
 
+void * initStack(){
+	kernelStack = kmalloc(0x20000);
+	kernelStack = kernelStack + 0x20000;
+	return kernelStack;
+}
 
+void irq0_handler() {
+
+}
 
 
 void clearBSS(void * bssAddress, uint64_t bssSize)
@@ -81,11 +90,15 @@ void * initializeKernelBinary()
 	ncPrint("[Done]");
 	ncNewline();
 	ncNewline();
-	return getStackBase();
+	return initStack();
 }
 
 int main()
 {
+	ncPrint("  KernelStack! : 0x");
+	ncPrintHex((uint64_t)kernelStack);
+	ncNewline();
+	/*
 	pagingInit();
 	//memInit();
 	pageManagementInit();
@@ -94,6 +107,7 @@ int main()
 	kIDTInitialize();
   initProcessQueues();
 	initializeRequiredProcesses();
+	*/
 
 /*
 	process * p = initProcess(0x400000,"nombre");
@@ -123,27 +137,6 @@ int main()
 		deleteProcess(p);
 			printALl();
 			*/
-/*
-	ncNewline();
-	ncPrint("  main User stack: 0x");
-	ncPrintHex((uint64_t)p->userStack);
-
-	ncNewline();
-	ncPrint("  main Kernel stack: 0x");
-	ncPrintHex((uint64_t)p->kernelStack);
-
-	ncNewline();
-	ncPrint("  main Process PID: ");
-	ncPrintDec((uint64_t)p->PID);
-
-	ncNewline();
-	ncPrint(" main EntryPoint: 0x");
-	ncPrintHex((uint64_t)p->entryPoint);
-*/
-
-
-
-
 
 
 	((EntryPoint)sampleCodeModuleAddress)();
