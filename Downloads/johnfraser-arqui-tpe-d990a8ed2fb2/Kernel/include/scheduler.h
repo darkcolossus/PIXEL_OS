@@ -22,6 +22,8 @@ void printAll();
 void deleteProcessWrapper(int pid);
 int deleteProcess(processQueue *pq ,int pid);
 process * scheduling();
+void* userToKernel(void * rsp);
+void* kernelToUser();
 
 
 

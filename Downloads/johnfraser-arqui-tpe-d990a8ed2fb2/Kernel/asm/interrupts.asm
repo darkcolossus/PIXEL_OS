@@ -10,6 +10,10 @@ GLOBAL TTInterruptHandler
 EXTERN keyboardHandler
 EXTERN syscallHandler
 EXTERN TTHandler
+extern userToKernel
+extern nextProcess
+extern kernelToUser
+extern irq0_handler
 
 section .text
 
@@ -95,16 +99,25 @@ TTInterruptHandler:
 ;	iretq
 
 	pushaq
-	mov rdi, rsp
-	call TTHandler
-	cmp rax, 0
-	je .dero
-	mov rsp, rax
-	
-.dero:
-	popaq
-	iretq
+	cli
 
+	call 	TTHandler
+
+	mov 	rdi,rsp
+	call	userToKernel
+	mov		rsp,rax
+
+	call 	irq0_handler
+	call 	nextProcess ;
+
+	call 	kernelToUser;
+	mov		rsp,rax
+	mov		al,0x20
+	out 	0x20,al
+
+	popaq
+	sti
+	iretq
 
 keyboardInterruptHandler:
 	cli

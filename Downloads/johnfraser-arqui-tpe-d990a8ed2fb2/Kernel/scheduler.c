@@ -314,3 +314,14 @@ void * contextSwitching(void * rsp){
 
 	return p->kernelStack;
 }
+
+void* userToKernel(void * rsp){
+
+}
+
+void* kernelToUser(){
+
+}
+void nextProcess(){
+	
+}

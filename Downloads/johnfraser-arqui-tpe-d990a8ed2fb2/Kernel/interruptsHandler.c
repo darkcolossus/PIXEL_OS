@@ -63,7 +63,5 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 
 uint64_t TTHandler(uint64_t stack){
 	timerDelegator();
-	//return contextSwitching(stack);
-	//kputString("soy el timertick nico se la come");
 	return 0;
 }
