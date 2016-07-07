@@ -17,17 +17,22 @@ void block(uint64_t id){
 }
 */
 
+/*
 #include "messagging.h"
 
 void addToBlocked(int pid){
 
+	pNode * p = kmalloc(sizeof(pNode));
+	p->process->pid = pid;
 
-	if(){}
+	if(){
+
+	}
 
 }
 
 void unblock(int pid){
 
-	
-}
 
+}
+*/
