@@ -16,3 +16,18 @@ void block(uint64_t id){
 	}
 }
 */
+
+#include "messagging.h"
+
+void addToBlocked(int pid){
+
+
+	if(){}
+
+}
+
+void unblock(int pid){
+
+	
+}
+
