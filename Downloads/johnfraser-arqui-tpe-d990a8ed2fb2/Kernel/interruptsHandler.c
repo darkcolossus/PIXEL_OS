@@ -51,17 +51,18 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			break;
 		}
 		case DELETE_PROCESS:{
-			deleteProcessWrapper((int)d);
+			//deleteProcessWrapper((int)d);
 			break;
 		}
 		case LIST_PROCESSES:{
-			printProcesses();
+			//printProcesses();
 			break;
 		}
 	}
 }
 
+
 uint64_t TTHandler(uint64_t stack){
 	timerDelegator();
-	return 0;
+	return changeContext(stack);
 }

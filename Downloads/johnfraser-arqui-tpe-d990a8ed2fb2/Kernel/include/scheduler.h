@@ -2,30 +2,22 @@
 #define __PIXEL_OS__SCHEDULER__
 
 #include "defines.h"
-#include "stddef.h"
-#include "memory.h"
+#include "process.h"
+#include <stdlib.h>
 
-void initScheduler();
-void addFirstProcess(processQueue * pq,process *p);
-void addLastProcess(processQueue *pq,process * p);
-void addProcessToWaiting(process * p);
-void addProcessToBlocked(process *p);
-int deleteProcessFromWaiting(int pid);
-int deleteProcessFromBloqued(int pid);
-process * getProcess(processQueue *pq, 	int pid);
-process * getProcessFromAll(int pid);
-void blockProcess(int pid);
-processNode* removeProcess(processQueue *pq ,int pid);
-process * removeProcessFromWaiting(uint64_t pid);
-process * removeProcessFromBloqued(uint64_t pid);
-void printAll();
-void deleteProcessWrapper(int pid);
-int deleteProcess(processQueue *pq ,int pid);
-process * scheduling();
-void* userToKernel(void * rsp);
-void* kernelToUser();
+typedef struct pNode{
+  process * process;
+  struct pNode * next;
+  struct pNode * prev;
+}pNode;
+
+typedef struct pNodeList{
+  struct pNode * current;
+  uint64_t size;
+}pNodeList;
 
 
-
+uint64_t changeContext(uint64_t rsp);
+void killCurrentProcess();
 
 #endif

@@ -10,12 +10,53 @@ GLOBAL TTInterruptHandler
 EXTERN keyboardHandler
 EXTERN syscallHandler
 EXTERN TTHandler
-extern userToKernel
-extern nextProcess
-extern kernelToUser
-extern irq0_handler
+
+align 16
+%macro pusha 0
+		push		rax
+		push		rbx
+		push		rcx
+		push		rdx
+		push		rbp
+		push		rdi
+		push		rsi
+		push		r8
+		push		r9
+		push		r10
+		push		r11
+		push		r12
+		push		r13
+		push		r14
+		push		r15
+		push		fs
+		push		gs
+%endmacro
+
+align 16
+%macro popa 0
+		pop			gs
+		pop			fs
+		pop			r15
+		pop			r14
+		pop			r13
+		pop			r12
+		pop			r11
+		pop			r10
+		pop			r9
+		pop			r8
+		pop			rsi
+		pop			rdi
+		pop			rbp
+		pop			rdx
+		pop			rcx
+		pop			rbx
+		pop			rax
+%endmacro
 
 section .text
+
+
+
 
 kEnableInterrupts:
 	sti
@@ -45,77 +86,24 @@ kSetHandler:
 	ret
 
 
+
+
 ;------------;
 ;  Handlers  ;
 ;------------;
 align 16
-%macro pushaq 0
-	push rax
-	push rbx
-	push rcx
-	push rdx
-	push rbp
-	push rdi
-	push rsi
-	push r8
-	push r9
-	push r10
-	push r11
-	push r12
-	push r13
-	push r14
-	push r15
-	pushfq
-%endmacro
-
-align 16
-%macro popaq 0
-	popfq
-	pop r15
-	pop r14
-	pop r13
-	pop r12
-	pop r11
-	pop r10
-	pop r9
-	pop r8
-	pop rsi
-	pop rdi
-	pop rbp
-	pop rdx
-	pop rcx
-	pop rbx
-	pop rax
-%endmacro
-
-
 TTInterruptHandler:
-
-;	cli
-;	call TTHandler
-;	mov 	al, 0x20
-;	out 	0x20, al
-;	sti
-;	iretq
-
-	pushaq
 	cli
-
-	call 	TTHandler
-
-	mov 	rdi,rsp
-	call	userToKernel
-	mov		rsp,rax
-
-	call 	irq0_handler
-	call 	nextProcess ;
-
-	call 	kernelToUser;
-	mov		rsp,rax
-	mov		al,0x20
-	out 	0x20,al
-
-	popaq
+	pusha
+	mov rdi,	rsp
+	call TTHandler
+	cmp rax,0
+	je .dero
+	mov rsp,rax
+	.dero:
+	mov 	al, 0x20
+	out 	0x20, al
+	popa
 	sti
 	iretq
 
