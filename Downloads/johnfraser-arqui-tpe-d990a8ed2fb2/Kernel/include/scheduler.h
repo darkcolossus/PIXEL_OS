@@ -16,9 +16,18 @@ typedef struct pNodeList{
   uint64_t size;
 }pNodeList;
 
-
+void initilizeScheduler();
+void addProcessToWaiting(process * p);
+void addProcessToBloqued(process * p);
+process * getLastP();
+process * getCurrentWaiting();
+process * nextProcess();
 uint64_t changeContext(uint64_t rsp);
 void printWaiting();
+void printList(pNodeList * pq);
 void killCurrentProcess();
+int isBlockedListNull();
+int blockProcess(int pid);
+int unblockProcess(int pid);
 
 #endif

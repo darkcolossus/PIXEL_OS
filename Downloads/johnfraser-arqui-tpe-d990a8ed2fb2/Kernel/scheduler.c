@@ -150,3 +150,15 @@ void printList(pNodeList * pq){
 void killCurrentProcess(){
 
 }
+
+int isBlockedListNull(){
+  return bloquedPList->current == NULL?1:0;
+}
+
+int blockProcess(int pid){
+  return 0;
+}
+
+int unblockProcess(int pid){
+  return 0;
+}
