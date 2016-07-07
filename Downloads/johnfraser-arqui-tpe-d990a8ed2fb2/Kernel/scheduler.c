@@ -95,6 +95,57 @@ uint64_t changeContext(uint64_t rsp){
   }
 
 }
+void printWaiting(){
+  printList(waitingPList);
+}
+
+void printList(pNodeList * pq){
+		//kputString("estoy en printall");
+   //start from the beginning
+   kputNewLine();
+	kDisableInterrupts();
+	 if(pq == NULL)
+	 	return;
+  pNode *ptr = pq->current;
+		if(ptr == NULL)
+			return;
+   //navigate till the end of the list
+ 	kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
+	kputNewLine();
+
+   //while(ptr != NULL){
+	 int i;
+	 for(i=0;i<pq->size;i++){
+   		 //kputString("EL NOMBRE DEL PROCESO ES:");
+   		 //kputString(ptr->currentProcess->name);
+   		 //kputNewLine();
+		 int pid = ptr->process->pid;
+		 char * str[100];
+		 //kitoa(pid,str);
+       kprintDec(pid);
+       kputString("\t\t");
+		 	kputString(ptr->process->name);
+		 //kputString(str);
+       kputString("\t\t");
+				kprintDec(ptr->process->state);
+       //kputString("RUNNING");
+       //kputString("RUNNING"); ACA VA EL ESTADO
+       kputString("\t\t");
+       //kputString("SHELL");
+       kputString("\t\t\t\t");
+       kprintHex((uint64_t)ptr->process->rsp);
+		 /*
+		 ncPrint("Elemento: ");
+		 ncPrintDec(ptr->currentProcess->PID);
+		 ncNewline();
+		 */
+		 kputNewLine();
+			ptr = ptr->next;
+   }
+
+   kEnableInterrupts();
+   while(1);
+}
 
 void killCurrentProcess(){
 
