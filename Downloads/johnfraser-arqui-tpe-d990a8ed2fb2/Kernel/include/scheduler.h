@@ -18,6 +18,7 @@ typedef struct pNodeList{
 
 
 uint64_t changeContext(uint64_t rsp);
+void printWaiting();
 void killCurrentProcess();
 
 #endif

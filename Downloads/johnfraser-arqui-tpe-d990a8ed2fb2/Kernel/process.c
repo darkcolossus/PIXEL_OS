@@ -6,7 +6,7 @@ int getPID();
 void * toStackAddress(void * page);
 void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,char argv[]);
 int wrapper(EntryPoint func, uint64_t argc, void *argv);
-
+extern void printWaiting();
 
 process *  createProcess(EntryPoint func,const char * name, uint64_t argc, char * argv[]){
 	process * p = kmalloc(sizeof(struct process));
@@ -93,10 +93,17 @@ static uint64_t shellProcess3(){
 		//ncPrint("IDLEEEE");
 		//kEnableInterrupts();
     //((EntryPoint)shellCodeModuleAddress)();
-		kputString("shellProcess3");
+		//kputString("shellProcess3");
 		//kputNewLine();
   }
 }
+
+void printWaitingProcesses(){
+	process * p  = createProcess(printWaiting,"PS",0,NULL);
+	addProcessToWaiting(p);
+}
+
+
 
 void initEssencialProcesses(){
 
