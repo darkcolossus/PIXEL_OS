@@ -67,28 +67,22 @@ process * nextProcess(){
 
 
 uint64_t changeContext(uint64_t rsp){
-//kputString("a");
   process *p;
   if(isKernelStack == 1){
-    //  kputString("Vengo del kernel!");
-    //  kputString("Este es el pid: ");
       p = getCurrentWaiting();
       if(p==NULL)
         return 0;
-    //  kprintDec(p->pid);
-    //  kputNewLine();
+      p->state = RUNNING;
       p->kernelStack = rsp;
       isKernelStack = 0;
       return p->rsp;
   }else{
-  //  kputString("Vengo con el rsp del usuario");
-  //  kputString("Este es el pid: ");
-  //  kprintDec(p->pid);
-  //  kputNewLine();
       p=getCurrentWaiting();
     if(p==NULL)
       return 0;
       p->rsp = rsp;
+      if(p->state != BLOCKED)
+        p->state = WAITING;
       nextProcess();
       isKernelStack = 1;
       return p->kernelStack;
@@ -100,65 +94,104 @@ void printWaiting(){
 }
 
 void printList(pNodeList * pq){
-		//kputString("estoy en printall");
-   //start from the beginning
    kputNewLine();
-	kDisableInterrupts();
+	 kDisableInterrupts();
 	 if(pq == NULL)
 	 	return;
-  pNode *ptr = pq->current;
-		if(ptr == NULL)
-			return;
-   //navigate till the end of the list
- 	kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
-	kputNewLine();
-
-   //while(ptr != NULL){
+   pNode *ptr = pq->current;
+	 if(ptr == NULL)
+		return;
+ 	 kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
+	 kputNewLine();
 	 int i;
+    kDisableInterrupts();
 	 for(i=0;i<pq->size;i++){
-   		 //kputString("EL NOMBRE DEL PROCESO ES:");
-   		 //kputString(ptr->currentProcess->name);
-   		 //kputNewLine();
 		 int pid = ptr->process->pid;
-		 char * str[100];
-		 //kitoa(pid,str);
-       kprintDec(pid);
-       kputString("\t\t");
-		 	kputString(ptr->process->name);
-		 //kputString(str);
-       kputString("\t\t");
-				kprintDec(ptr->process->state);
-       //kputString("RUNNING");
-       //kputString("RUNNING"); ACA VA EL ESTADO
-       kputString("\t\t");
-       //kputString("SHELL");
-       kputString("\t\t\t\t");
-       kprintHex((uint64_t)ptr->process->rsp);
-		 /*
-		 ncPrint("Elemento: ");
-		 ncPrintDec(ptr->currentProcess->PID);
-		 ncNewline();
-		 */
+     kprintDec(pid);
+     kputString("\t\t");
+		 kputString(ptr->process->name);
+		 kputString("\t\t");
+		 kprintDec(ptr->process->state);
+     kputString("\t\t");
+     kputString("\t\t\t\t");
+     kprintHex((uint64_t)ptr->process->rsp);
 		 kputNewLine();
-			ptr = ptr->next;
+		 ptr = ptr->next;
    }
-
    kEnableInterrupts();
    while(1);
 }
 
 void killCurrentProcess(){
-
+  process * p = getCurrentWaiting();
+  kDisableInterrupts();
+  int ok = killProcess(p->pid,waitingPList);
+  if(ok == 0)
+    return;
+  killProcess(p->pid,bloquedPList);
+    kEnableInterrupts();
 }
 
+int killProcess(int pid, pNodeList * list){
+  process * p = removeProcess(pid,list);
+  if(p == NULL)
+    return -1;
+  pageFree(p->rsp);
+  return 0;
+}
+
+process * removeProcess(int pid, pNodeList * list){
+  pNode * actual = list->current;
+  pNode * prev = list->current->prev;
+  int count = list->size;
+  if(actual == NULL)
+    return NULL;
+  if(actual->process->pid == pid && count ==1){
+    list->current = NULL;
+    list->size--;
+    return actual->process;
+  }
+  while(actual->process->pid != pid && count > 0){
+    prev =  actual;
+    actual =  actual->next;
+    count--;
+  }
+
+  if(actual->process->pid == pid){
+    prev->next = actual->next;
+    actual->next->prev = prev;
+    list->size--;
+    return actual->process;
+  }
+  return NULL;
+
+}
 int isBlockedListNull(){
   return bloquedPList->current == NULL?1:0;
 }
 
 int blockProcess(int pid){
+  kDisableInterrupts();
+  process *p = removeProcess(pid,bloquedPList);
+  if(p ==NULL){
+    kEnableInterrupts();
+    return -1;
+  }
+  p->state= BLOCKED;
+  addProcessToBloqued(p);
+  kEnableInterrupts();
   return 0;
 }
 
 int unblockProcess(int pid){
+  kDisableInterrupts();
+  process *p = removeProcess(pid,bloquedPList);
+  if(p == NULL){
+    kEnableInterrupts();
+    return -1;
+  }
+  p->state = WAITING;
+  addProcessToWaiting(p);
+  kEnableInterrupts();
   return 0;
 }

@@ -29,5 +29,6 @@ void killCurrentProcess();
 int isBlockedListNull();
 int blockProcess(int pid);
 int unblockProcess(int pid);
+process * removeProcess(int pid, pNodeList * list);
 
 #endif
