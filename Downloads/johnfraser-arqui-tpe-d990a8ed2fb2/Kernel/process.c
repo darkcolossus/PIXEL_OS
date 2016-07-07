@@ -1,47 +1,37 @@
 #include "process.h"
 #include "defines.h"
-#include <naiveConsole.h>
-
-void * userStackPage;
-void * kernelStackPage;
-static void * const shellCodeModuleAddress = (void*)0x400000;
-
 static int pid = 1;
-extern wrapper;
+static void * const shellCodeModuleAddress = (void*)0x400000;
+int getPID();
+void * toStackAddress(void * page);
+void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,char argv[]);
+int wrapper(EntryPoint func, uint64_t argc, void *argv);
 
-process* initProcess(EntryPoint entryPoint, char *name,uint64_t argc,char* argv[]){
 
-	process * newProcess = (process *) kmalloc(sizeof(process));
-	//	ncPrint("  Entre a crear un proces");
-	//allocate space for userStack and kernelStack
-	userStackPage = (void *)pageAlloc();//pa.alloc(1); VER
-	kernelStackPage = (void*)pageAlloc();//pa.alloc(1); VER
-	newProcess->entryPoint = entryPoint;
-	int length = kstrlen(name);
-	newProcess->name = kmalloc(sizeof(char) * length +1);
-	memcpy(newProcess->name, name, length);
+process *  createProcess(EntryPoint func,const char * name, uint64_t argc, char * argv[]){
+	process * p = kmalloc(sizeof(struct process));
 
-	//page allocating assignment
-	newProcess->userStack = fillStackFrame(entryPoint,toStackAddress(userStackPage),argc,argv);
-	//newProcess->kernelStack = toStackAddress(kernelStackPage);
-	newProcess->PID = getPID();
-	newProcess->status = WAITING;
+	p->name = kmalloc(kstrlen(name) + 1);
+	memcpy(p->name, name, kstrlen(name) + 1);
+	p->pid = getPID();
+	uint64_t rsp = pageAlloc();
+	rsp = toStackAddress(rsp);
+	p->rsp = fillStackFrame(func,rsp,argc,argv);
+	p->state = WAITING;
 
-	return newProcess;
+	return p;
 }
-
 
 int getPID(){
 	int toReturn = pid;
 	pid++;
 	return toReturn;
 }
+
+
 void * toStackAddress(void * page){
-	return page +  0x1000 - 0x10; //PageAllocator::PageSize; VER
+	return page +  0x1000 - sizeof(struct stackFrame); //PageAllocator::PageSize; VER
 }
-
-
-
 void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,char argv[]){
 	stackFrame * frame = (stackFrame*)userStack;
 	frame->gs =		0x001;
@@ -61,10 +51,9 @@ void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,ch
 	frame->rcx =	0x00F;
 	frame->rbx =	0x010;
 	frame->rax =	0x011;
-
 	frame->rip =	(uint64_t)&wrapper;
 	frame->cs =		0x008;
-	frame->eflags = 0x202;
+	frame->rflags = 0x202;
 	frame->rsp =	(uint64_t)&(frame->base);
 	frame->ss = 	0x000;
 	frame->base =	0x000;
@@ -72,30 +61,50 @@ void * fillStackFrame(EntryPoint entryPoint, void * userStack , uint64_t argc,ch
 	return &(frame->gs);
 }
 
+int wrapper(EntryPoint func, uint64_t argc, void *argv){
+	func(argc, argv);
+	killCurrentProcess();
+	TTInterruptHandler() ;
+	return 0;
+}
 
 
 static uint64_t shellProcess(){
   while(1){
-
-
-
-    ((EntryPoint)shellCodeModuleAddress)();
-
+	//	kDisableInterrupts();
+	//	ncPrint("Este es el shell 1");
+	//	kEnableInterrupts();
+    //((EntryPoint)shellCodeModuleAddress)();
+		//kputString("1");
+	//	kputNewLine();
   }
 }
 
-void createIdleProcess(){
-	process *p = initProcess(NULL, "idle",0,NULL);
-	//TODO: TENEMOS QUE AGREGARLO A LA QUEUE WAITING
-	addProcessToWaiting(p);
+static uint64_t shellProcess2(){
+  while(1){
+	//kputString("2");
+	//kputNewLine();
+	//((EntryPoint)shellCodeModuleAddress)();
+  }
+}
+static uint64_t shellProcess3(){
+  while(1){
+		//kDisableInterrupts();
+		//ncPrint("IDLEEEE");
+		//kEnableInterrupts();
+    //((EntryPoint)shellCodeModuleAddress)();
+		kputString("shellProcess3");
+		//kputNewLine();
+  }
 }
 
-void initializeRequiredProcesses(){
-	createIdleProcess();
-	process * shellInit = initProcess(shellProcess,"Shell 1",0,NULL);
-	addProcessToWaiting(shellInit);
-	shellInit = initProcess(shellProcess,"Shell 2",0,NULL);
-	addProcessToWaiting(shellInit);
-	shellInit = initProcess(shellProcess,"Shell 3",0,NULL);
-	addProcessToWaiting(shellInit);
+void initEssencialProcesses(){
+
+	process * p  = createProcess(shellProcess3,"IDLE",0,NULL);
+	addProcessToWaiting(p);
+	p = createProcess(shellProcess,"Shell1",0,NULL);
+	addProcessToWaiting(p);
+	p = createProcess(shellProcess2,"Shell2",0,NULL);
+	addProcessToWaiting(p);
+
 }
