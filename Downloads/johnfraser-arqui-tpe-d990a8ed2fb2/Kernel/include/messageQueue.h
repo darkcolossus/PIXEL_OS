@@ -5,6 +5,28 @@
 #include "memory.h"
 #include "stddef.h"
 
+
+typedef struct message{
+	void * msg;
+	int msgSize;
+	uint64_t senderId;
+	message * next;
+}message;
+
+typedef struct msgQueueNode
+{
+	uint64_t id;
+	message * msgs;
+	message * lastmsg;
+	msgQueueNode * next;
+}msgQueueNode;
+
+typedef struct messageQueue
+{
+	messageQueueNode * first;
+	int size;
+}messageQueue;
+
 void messageQueueInit();
 void createMessage(uint64_t emisor, uint64_t receptor, void * content, uint64_t size);
 void addMessageToQueue(message * newMessage, uint64_t receptor);

@@ -101,20 +101,26 @@ void printList(pNodeList * pq){
    pNode *ptr = pq->current;
 	 if(ptr == NULL)
 		return;
- 	 kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
+ 	 kputString("PID\t\t\tName\t\t\tState\t\t\tMemory");
 	 kputNewLine();
 	 int i;
    kDisableInterrupts();
-
+   int state;
 	 for(i=0;i<pq->size+1;i++){
 		 int pid = ptr->process->pid;
      kprintDec(pid);
-     kputString("\t\t");
+     kputString("\t\t\t   ");
 		 kputString(ptr->process->name);
-		 kputString("\t\t");
-		 kprintDec(ptr->process->state);
-     kputString("\t\t");
-     kputString("\t\t\t\t");
+		 kputString("\t\t\t");
+		 state = ptr->process->state;
+     if(state == 0){
+        kputString("WAITING");
+     }else if(state == 1){
+        kputString("BLOCKED");
+     }else{
+        kputString("RUNNING");
+     }
+     kputString("\t\t\t");
      kprintHex((uint64_t)ptr->process->rsp);
 		 kputNewLine();
 		 ptr = ptr->next;
