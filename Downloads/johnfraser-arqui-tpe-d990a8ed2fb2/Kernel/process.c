@@ -65,36 +65,17 @@ int wrapper(EntryPoint func, uint64_t argc, void *argv){
 	func(argc, argv);
 	killCurrentProcess();
 	TTInterruptHandler() ;
+	kputString("pase por finalizar");
 	return 0;
 }
 
 
 static uint64_t shellProcess(){
   while(1){
-	//	kDisableInterrupts();
-	//	ncPrint("Este es el shell 1");
-	//	kEnableInterrupts();
-    //((EntryPoint)shellCodeModuleAddress)();
-		//kputString("1");
-	//	kputNewLine();
   }
 }
-
-static uint64_t shellProcess2(){
+static uint64_t idle(){
   while(1){
-	//kputString("2");
-	//kputNewLine();
-	//((EntryPoint)shellCodeModuleAddress)();
-  }
-}
-static uint64_t shellProcess3(){
-  while(1){
-		//kDisableInterrupts();
-		//ncPrint("IDLEEEE");
-		//kEnableInterrupts();
-    //((EntryPoint)shellCodeModuleAddress)();
-		//kputString("shellProcess3");
-		//kputNewLine();
   }
 }
 
@@ -107,11 +88,11 @@ void printWaitingProcesses(){
 
 void initEssencialProcesses(){
 
-	process * p  = createProcess(shellProcess3,"IDLE",0,NULL);
+	process * p  = createProcess(idle,"IDLE",0,NULL);
 	addProcessToWaiting(p);
-	p = createProcess(shellProcess,"Shell1",0,NULL);
+	p = createProcess(shellProcess,"Shell",0,NULL);
 	addProcessToWaiting(p);
-	p = createProcess(shellProcess2,"Shell2",0,NULL);
-	addProcessToWaiting(p);
+//	p = createProcess(shellProcess2,"Shell2",0,NULL);
+//	addProcessToWaiting(p);
 
 }

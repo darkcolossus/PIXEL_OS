@@ -95,7 +95,7 @@ void printWaiting(){
 
 void printList(pNodeList * pq){
    kputNewLine();
-	 kDisableInterrupts();
+
 	 if(pq == NULL)
 	 	return;
    pNode *ptr = pq->current;
@@ -104,8 +104,9 @@ void printList(pNodeList * pq){
  	 kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
 	 kputNewLine();
 	 int i;
-    kDisableInterrupts();
-	 for(i=0;i<pq->size;i++){
+   kDisableInterrupts();
+
+	 for(i=0;i<pq->size+1;i++){
 		 int pid = ptr->process->pid;
      kprintDec(pid);
      kputString("\t\t");
@@ -119,7 +120,7 @@ void printList(pNodeList * pq){
 		 ptr = ptr->next;
    }
    kEnableInterrupts();
-   while(1);
+  
 }
 
 void killCurrentProcess(){
