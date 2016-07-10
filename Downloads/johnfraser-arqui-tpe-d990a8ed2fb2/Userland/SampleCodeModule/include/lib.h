@@ -16,7 +16,7 @@ void clearScreen();
 void read(char* buffer, char delimiter);
 char getChar();
 
-
+int gameS();
 
 // Helpers
 int numberLength (int i);

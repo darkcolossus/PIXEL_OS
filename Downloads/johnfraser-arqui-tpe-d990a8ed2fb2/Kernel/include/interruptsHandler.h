@@ -8,7 +8,7 @@
 #include "display.h"
 
 void keyboardHandler();
-void syscallHandler(ddword a, ddword b, ddword c, ddword d);
+void syscallHandler(uint64_t a, ddword b, ddword c, ddword d);
 uint64_t TTHandler(uint64_t stack);
 #include "sound.h"
 #include "timer.h"

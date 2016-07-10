@@ -1,6 +1,9 @@
 #include "interruptsHandler.h"
-
+#include "scheduler.h"
+#include "process.h"
 extern void _beep();
+int checktest();
+void printWaitingProcesses();
 
 //int character = 0x0;
 
@@ -19,7 +22,7 @@ void keyboardHandler(void) {
 	return;
 }
 
-void syscallHandler(ddword a, ddword b, ddword c, ddword d){
+void syscallHandler(uint64_t a, ddword b, ddword c, ddword d){
 	switch (a) {
 		case WRITE: {
 			kWrite((char*)c, (int) d);
@@ -48,6 +51,9 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 		}
 		case CREATE_PROCESS:{
 			//addProcess(initProcess(0x400000, "prueba"));
+			process * p = createProcess( &checktest, "IDLE", 0, NULL);
+			addProcessToWaiting(p);
+			
 			break;
 		}
 		case DELETE_PROCESS:{
@@ -58,9 +64,23 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 			printWaitingProcesses();
 			break;
 		}
+		case VIDEO:{
+			_video();
+		}
+		case PIXEL:{
+			pixel_wrap((int) b, (int) c, (int) d);
+			break;
+		}
 	}
 }
 
+int checktest(){
+	while(1)
+	{
+		_beep();
+	}
+	return 1;
+}
 
 uint64_t TTHandler(uint64_t stack){
 	timerDelegator();

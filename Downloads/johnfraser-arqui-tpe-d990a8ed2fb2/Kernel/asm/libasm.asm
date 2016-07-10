@@ -1,6 +1,8 @@
 GLOBAL cpuVendor
 GLOBAL kin
 GLOBAL kout
+GLOBAL inpw
+GLOBAL outpw
 GLOBAL _beep
 GLOBAL cr0Read 
 GLOBAL cr0Write
@@ -9,6 +11,16 @@ GLOBAL cr3Write
 
 
 section .text
+
+inpw:
+	mov rdx, rdi
+	in ax, dx
+	ret
+
+outpw:
+	mov rdx, rdi
+	out dx, ax
+	ret
 
 cpuVendor:
 	push rbp

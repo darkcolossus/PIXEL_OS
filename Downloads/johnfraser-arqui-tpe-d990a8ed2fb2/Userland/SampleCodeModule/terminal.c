@@ -255,5 +255,7 @@ int ipc(){
 
 int game(){
 	printf("Listo para jugar?\n");
+	runSyscall(CREATE_PROCESS,(uint64_t) &gameS, "game", 0x0);
+	//gameS();
 	return 0;
 }
