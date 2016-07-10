@@ -90,8 +90,6 @@ void initEssencialProcesses(){
 
 	process * p  = createProcess(idle,"IDLE",0,NULL);
 	addProcessToWaiting(p);
-	p = createProcess(shellProcess,"Shell",0,NULL);
-	addProcessToWaiting(p);
 //	p = createProcess(shellProcess2,"Shell2",0,NULL);
 //	addProcessToWaiting(p);
 

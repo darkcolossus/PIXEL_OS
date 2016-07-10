@@ -1,5 +1,5 @@
 #include "interruptsHandler.h"
-
+#include "process.h"
 extern void _beep();
 
 //int character = 0x0;
@@ -56,6 +56,11 @@ void syscallHandler(ddword a, ddword b, ddword c, ddword d){
 		}
 		case LIST_PROCESSES:{
 			printWaitingProcesses();
+			break;
+		}
+		case TERMINAL:{
+			process * p = createProcess(b,"Terminal",0,NULL);
+			addProcessToWaiting(p);
 			break;
 		}
 	}

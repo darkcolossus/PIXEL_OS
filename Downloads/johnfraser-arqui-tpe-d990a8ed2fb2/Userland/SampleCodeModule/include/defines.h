@@ -22,7 +22,8 @@ typedef enum SYSTEM_CALLS {
         BEEP = 0x7,
         CREATE_PROCESS = 0x8,
         DELETE_PROCESS = 0x9,
-        LIST_PROCESSES = 0xA
+        LIST_PROCESSES = 0xA,
+        TERMINAL = 0xB
 } SYSCALLS;
 
 typedef int (*action)(char*);

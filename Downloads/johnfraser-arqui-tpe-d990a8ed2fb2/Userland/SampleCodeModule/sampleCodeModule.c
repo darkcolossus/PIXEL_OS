@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "include/terminal.h"
+#include "include/libasm.h"
 
 char * v = (char*)0xB8000 + 79 * 2;
 
@@ -14,8 +15,9 @@ int main() {
 	memset(&bss, 0, &endOfBinary - &bss);
 
 	// paso control a terminal.c
-	terminal();
-
+	//terminal();
+	runSyscall(TERMINAL,(uint64_t)terminal,0x0,0x0);
+	while(1);
 	// nunca debería llegar a este punto
 
 
