@@ -185,6 +185,35 @@ uint64_t    MustBeZero:12;
 } CR3;
 
 
+/*IPC*/
+typedef struct message message;
+
+typedef struct message{
+    void * msg;
+    uint64_t msgSize;
+    uint64_t senderId;
+    message * next;
+}message;
+
+typedef struct msgQueueNode msgQueueNode;
+
+typedef struct msgQueueNode{
+    uint64_t id;
+    message * msgs;
+    message * lastmsg;
+    msgQueueNode * next;
+}msgQueueNode;
+
+
+
+typedef struct{
+    msgQueueNode * first;
+    uint64_t size;
+}messageQueue;
+
+/*END OF IPC*/
+
+
 /*END OF MEMORY */
 typedef int (*EntryPoint)();
 
