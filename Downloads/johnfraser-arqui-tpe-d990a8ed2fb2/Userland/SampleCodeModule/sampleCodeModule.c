@@ -17,7 +17,7 @@ int main() {
 	// paso control a terminal.c
 	//terminal();
 	runSyscall(TERMINAL,(uint64_t)terminal,0x0,0x0);
-	while(1);
+	//while(1);
 	// nunca debería llegar a este punto
 
 
