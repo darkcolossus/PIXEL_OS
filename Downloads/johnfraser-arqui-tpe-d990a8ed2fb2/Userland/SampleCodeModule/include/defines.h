@@ -28,6 +28,8 @@ typedef enum SYSTEM_CALLS {
         PID =0xD,
         MQSEND = 0XE,
         MQREAD = 0XF,
+        DRAW_RECT =0X10,
+        DRAW_CIRC =0x11
 } SYSCALLS;
 
 typedef int (*action)(char*);

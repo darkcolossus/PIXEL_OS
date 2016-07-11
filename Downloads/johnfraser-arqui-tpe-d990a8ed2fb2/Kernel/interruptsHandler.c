@@ -104,6 +104,14 @@ uint64_t syscallHandler(uint64_t a, uint64_t b, uint64_t c, uint64_t d){
 			return ms->msg;//ms->msg;
 			break;
 		}
+		case DRAW_RECT:{
+			rect_wrap(b,c,d);
+			break;
+		}
+		case DRAW_CIRC:{
+			circle_wrap(b,c,d);
+			break;
+		}
 	}
 	return 0;
 }

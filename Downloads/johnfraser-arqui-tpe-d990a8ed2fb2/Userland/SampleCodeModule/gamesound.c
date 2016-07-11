@@ -5,14 +5,12 @@
 #include "include/sound.h"
 int gamesound(){
 	
-	unsigned long a=0;
-	startSong("2");
+	//startSong("2");
+	int a;
 	while (1){
-		if(a<34222222){
-			a++;
-		}else{
-			a=0;
-			startSong("2");
+		a= runSyscall(MQREAD,5,5,0x0);
+		if(a==1){
+			runSyscall(BEEP,0x0,0x0,0x0);
 		}
 	}
 	

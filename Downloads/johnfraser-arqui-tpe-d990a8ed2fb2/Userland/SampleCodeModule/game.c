@@ -24,7 +24,7 @@ void updateNotes(int* tiles);
 int INITIAL_SPEED= 4;
 static int pid;
 static int inputpid;
-
+static int sound =0;
 int gameS (){
 	pid =runSyscall(PID,0x0,0x0,0x0);
 	inputpid=runSyscall(MQREAD,pid,0x1,0x0);
@@ -46,19 +46,21 @@ int gameS (){
 
 		}
 		
-		runSyscall(BEEP,0x0,0x0,0x0);
+		//runSyscall(BEEP,0x0,0x0,0x0);
 		printf("Choose an option\n");
 		//input = getChar();
    			
 	} while(input!='\n' && input!='q' && input!='Q' );
 
 	if (input == '\n'){
+
 		startGame();
 	}else{
 		return 1;
 	}
 	while(1){
-	if ((input=getChar())=='\n')
+	if ((input=(char)runSyscall(MQREAD,pid,inputpid,0x0))=='\n')
+		//runSyscall(CREATE_PROCESS,(uint64_t)gamesound,"GameInputProc",0x0);
 		startGame();
 
 	}
@@ -88,8 +90,17 @@ char getCharC(){
 
 void startGame(){
 	videoAct();
+	
+	
+	if (sound==0){
+		sound=1;
+		runSyscall(CREATE_PROCESS,(uint64_t)gamesound,"GameInputProc",0x0);
+	
+	}
+	
 
 	
+
   	int speedinc=0;
 	int speed= INITIAL_SPEED;
 	int interval;
@@ -149,8 +160,10 @@ void startGame(){
 
 		
 	}
-	draw_rectangle(500, 500, 500, 500,0, 0,0);
-	
+	draw_rectangle(400, 400, 800, 800,0, 0,0);
+	draw_rectangle(800, 400, 800, 800,0, 0,0);
+	draw_rectangle(400, 600, 800, 800,0, 0,0);
+	draw_rectangle(800, 600, 800, 800,0, 0,0);
 }
 
 void drawCircles(){
@@ -247,6 +260,7 @@ int parseInput(int* notes, char input){
 
 
 	if(input=='c'||input=='C'){
+		runSyscall(MQSEND,5,5,1);
 		draw_solid_circle(128, 700, 25, 255, 126,126);
 		if ((notes[12]!=-1) && ((notes[12]-88 <675) && (notes[12]+88> 675)) || ((notes[12]-88<725) && (notes[12]+88 >725)))
 		{
@@ -270,6 +284,7 @@ int parseInput(int* notes, char input){
 		}	
 		
 	}else if(input=='v'||input=='V'){
+		runSyscall(MQSEND,5,5,1);
 		draw_solid_circle(384, 700, 25, 255, 126,126);
 		if ((notes[13]!=-1) && ((notes[13]-88 <675) && (notes[13]+88> 675)) || ((notes[13]-88<725 )&&( notes[13]+88 >725)))
 		{
@@ -293,6 +308,7 @@ int parseInput(int* notes, char input){
 			}
 		}
 	} else if(input=='b'||input=='B'){
+		runSyscall(MQSEND,5,5,1);
 		draw_solid_circle(630, 700, 25, 255, 126,126);
 		if ((notes[14]!=1) && ((notes[14]-88 <675) && (notes[14]+88> 675)) || ((notes[14]-88<725) && (notes[14]+88 >725)))
 		{
@@ -315,6 +331,7 @@ int parseInput(int* notes, char input){
 			}
 		}
 	}else if(input=='n'||input=='N'){
+		runSyscall(MQSEND,5,5,1);
 		draw_solid_circle(886, 700, 25, 255, 126,126);
 		if (notes[15]!=-1 && (notes[15]-88 <675 && notes[15]+88> 675) || (notes[15]-88<725 && notes[15]+88 >725))
 		{
@@ -503,15 +520,15 @@ void getSequence(int* tiles, int time){
 
 void showMenu(){
 	clearScreen();
-
+	printf("\n\n\n\n\n");
 	printf("P I A N O     T I L E S\n");
-	printf("\n\n\n\n\n");
+	printf("\n");
 	printf("you'll need to click on every tile before they go past the circles\n");
-	printf("\n\n\n\n\n");
+	printf("\n\n\n");
 	printf("Press ENTER when ready to play\n");
-	printf("\n\n\n\n\n");
+	printf("\n\\n\n");
 	printf("Use the C V B N keys to control each one of the four circles\n");
-	printf("\n\n\n\n\n");
+	printf("\n\n\n");
 
 	return;
 }
@@ -519,22 +536,57 @@ void showMenu(){
 
 
 void draw_rectangle(int x, int y, int xSize, int ySize, char R, char G, char B){
-        for(int i=(int) (xSize / 2)*(-1);i<(int)(xSize/2);i++){
+        /*for(int i=(int) (xSize / 2)*(-1);i<(int)(xSize/2);i++){
                 for(int j=(int) (ySize / 2)*(-1);j<(int)(ySize/2);j++){
                         sys_pixel(x+i,y+j,R,G,B);                   
                 }
-        }
+        }*/
 
+
+	int color=0;
+	color+=R;
+	color*=1000;
+	color+=G;
+	color*=1000;
+	color+=B;
+
+	int pos=0;
+	pos+=y;
+	pos*=1000;
+	pos+=x;
+
+
+	int size=0;
+	size+=ySize;
+	size*=1000;
+	size+=xSize;
+	runSyscall(DRAW_RECT,pos,size,color);
 }
 void draw_solid_circle(int x, int y, int radix, char R, char G, char B){
-        int dist_x;
+        /*int dist_x;
         for(int height = radix; height >= 0; height--){
                 dist_x = sqr(radix * radix - height * height);
                 for(int cur_x = -dist_x; cur_x <= dist_x; cur_x++){
                         sys_pixel(cur_x + x,y+ height, R,G,B);
                         sys_pixel(cur_x+x,y -height, R,G,B);
                 }
-        }
+        }*/
+
+       int color=0;
+	color+=R;
+	color*=1000;
+	color+=G;
+	color*=1000;
+	color+=B;
+
+	int pos=0;
+	pos+=y;
+	pos*=1000;
+	pos+=x;
+
+
+	
+	runSyscall(DRAW_CIRC,pos,radix,color);
 }
 
 void draw_hollow_circle(int x, int y, int radix, char R, char G, char B){

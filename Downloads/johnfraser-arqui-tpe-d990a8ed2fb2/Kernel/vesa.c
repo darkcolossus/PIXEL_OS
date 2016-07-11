@@ -1,4 +1,5 @@
 #include <stdint.h>
+
 #define VBE_DISPI_INDEX_ID 0
 #define VBE_DISPI_INDEX_XRES 1
 #define VBE_DISPI_INDEX_YRES 2
@@ -56,7 +57,7 @@ void loadScreen();
 void draw_solid_circle(int x, int y, int radix, char R, char G, char B);
 void draw_hollow_circle(int x, int y, int radix, char R, char G, char B);
 int sqr(int num);
-
+void rect_wrap(int b,int c,int d);
 
 void BgaWriteRegister(unsigned short IndexValue, unsigned short DataValue)
 {
@@ -172,4 +173,43 @@ void pixel_wrap(int x, int c, int color){
 
     put_pixel(x,c,B,G,R);
 
+}
+
+
+rect_wrap(int b,int c,int color){
+    char B = (char) (color%1000);
+    color/=1000;
+    char G = (char) (color%1000);
+    color/=1000;
+    char R = (char)color;
+    
+    int x= (int) (b%1000);
+    b/=1000;
+    int y=(int) (b%1000);
+
+
+    int xSize=(int) (c%1000);
+    c/=1000;
+    int ySize=(int) (c%1000);
+
+    draw_rectangle(x, y, xSize, ySize,  R,  G,  B);
+    
+}
+
+circle_wrap(int b,int c,int color){
+    char B = (char) (color%1000);
+    color/=1000;
+    char G = (char) (color%1000);
+    color/=1000;
+    char R = (char)color;
+    
+    int x= (int) (b%1000);
+    b/=1000;
+    int y=(int) (b%1000);
+
+
+   int radius = (int)(c%1000);
+
+    draw_solid_circle(x, y, radius,  R,  G,  B);
+    
 }

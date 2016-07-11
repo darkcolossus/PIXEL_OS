@@ -231,7 +231,9 @@ typedef enum SYSTEM_CALLS {
         PIXEL =0xC,
         PID=0xD,
         MQSEND =0xE,
-        MQREAD =0xF
+        MQREAD =0xF,
+        DRAW_RECT =0x10,
+        DRAW_CIRC =0x11
 } SYSCALLS;
 
 #define RTC_PORT		0x70

@@ -205,7 +205,16 @@ int help(char* args){
 }
 
 int beep(char* args){
-
+	char R=177;
+	char G=222;
+	char B=111;
+	int color=0;
+	color+=R;
+	color*=1000;
+	color+=G;
+	color*=1000;
+	color+=B;
+	runSyscall(DRAW_RECT,0,0,color);
 	
 
 	//runSyscall(BEEP,0x0,0x0,0x0);
@@ -274,7 +283,7 @@ int game(){
 	
 	int gameprocess= runSyscall(CREATE_PROCESS,(uint64_t)gameS,"PianoTiles",0x0);
 	int inputprocess = runSyscall(CREATE_PROCESS,(uint64_t)game_input,"GameInputProc",0x0);
-	runSyscall(CREATE_PROCESS,(uint64_t)gamesound,"GameInputProc",0x0);
+	//runSyscall(CREATE_PROCESS,(uint64_t)gamesound,"GameInputProc",0x0);
 	printf("SE CREO GAME E INPUT CON PIDS : %d y %d  \n", gameprocess,inputprocess);
 
 	runSyscall(MQSEND,gameprocess,0x1,inputprocess);
