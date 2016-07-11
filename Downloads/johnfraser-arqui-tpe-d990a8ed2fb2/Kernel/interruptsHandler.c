@@ -4,6 +4,7 @@
 #include "process.h"
 #include "stddef.h"
 #include "messageQueue.h"
+#include "interrupts.h"
 extern void _beep();
 int checktest();
 void printWaitingProcesses();
@@ -53,10 +54,12 @@ uint64_t syscallHandler(uint64_t a, uint64_t b, uint64_t c, uint64_t d){
 			break;
 		}
 		case CREATE_PROCESS:{
+			kDisableInterrupts();
 			//addProcess(initProcess(0x400000, "prueba"));
 			process * p = createProcess( b, (char *) c, 0, NULL);
 			addProcessToWaiting(p);
 			kprintDec(p->pid);
+			kEnableInterrupts();
 			return p->pid;
 			break;
 		}
@@ -81,15 +84,23 @@ uint64_t syscallHandler(uint64_t a, uint64_t b, uint64_t c, uint64_t d){
 			return getCurrentWaiting()->pid;
 		}
 		case MQSEND:{
+			
+			kDisableInterrupts();
 			createMessage( b,  c, d, sizeof(uint64_t));
+			kEnableInterrupts();
 			break;
 		}
 		case MQREAD:{
+			kDisableInterrupts();
 			message * ms = getFirstMessage(b,c);
+			
 			if (ms == NULL){
+				
+				kEnableInterrupts();
 				return 0;
 			}
-			_beep();
+			
+			kEnableInterrupts();
 			return ms->msg;//ms->msg;
 			break;
 		}

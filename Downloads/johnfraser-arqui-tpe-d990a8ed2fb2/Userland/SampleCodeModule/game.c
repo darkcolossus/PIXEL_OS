@@ -22,26 +22,33 @@ int sqr(int num);
 void clearTiles(int * notes, int speed);
 void updateNotes(int* tiles);
 int INITIAL_SPEED= 4;
-
+static int pid;
+static int inputpid;
 
 int gameS (){
-	int pid =runSyscall(PID,0x0,0x0,0x0);
-	int inputpid=runSyscall(MQREAD,pid,0x1,0x0);
-
+	pid =runSyscall(PID,0x0,0x0,0x0);
+	inputpid=runSyscall(MQREAD,pid,0x1,0x0);
+	printf("EN GAME LOS PROCESOS DE JUEGO E INPUT SON :%d ---- %d\n",pid,inputpid);
 	char input;
 	showMenu();
+	input=(char)runSyscall(MQREAD,pid,inputpid,0x0);
+	input=0;
 
+	/*while(1){
+		input=(char)runSyscall(MQREAD,pid,inputpid,0x0);
+		if(input!=0){
+			
+			printf("----------%c----------\n",input);
+		}
+	}*/
+	do {
+		while((input=(char)runSyscall(MQREAD,pid,inputpid,0x0))==0){
 
-while(1){
-	input=runSyscall(MQREAD,pid,input,0x0);
-	if(input!=0){
-		printf("%c\n",input);
-	}
-	}
-	/*do {
+		}
 		
+		runSyscall(BEEP,0x0,0x0,0x0);
 		printf("Choose an option\n");
-		input = getChar();
+		//input = getChar();
    			
 	} while(input!='\n' && input!='q' && input!='Q' );
 
@@ -54,7 +61,7 @@ while(1){
 	if ((input=getChar())=='\n')
 		startGame();
 
-	}*/
+	}
 
 }
 
@@ -89,7 +96,7 @@ void startGame(){
 	unsigned long cumulative=0;
 	unsigned long cum=0;
 	int time=0;
-	unsigned long MAX_TIME= 2;
+	unsigned long MAX_TIME= 0;
 	int playing =1;
 	int notes[16] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 	int rdnm = 12;
@@ -104,7 +111,7 @@ void startGame(){
 		if(cumulative<MAX_TIME){
 			//runSyscall(BEEP,0x0,0x0,0x0);
 
-			char input = getCharC();
+			char input = (char)runSyscall(MQREAD,pid,inputpid,0x0);
 			// if(aux!=0){
 			// 	input = aux;
 			// }
@@ -117,7 +124,7 @@ void startGame(){
 			cum++;
 		}else{
 
-			char input = getCharC();
+			char input = (char)runSyscall(MQREAD,pid,inputpid,0x0);
 			playing = parseInput(notes,input);
 			rdnm = rdnm % 16;
 			cumulative++;

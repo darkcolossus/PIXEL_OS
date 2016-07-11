@@ -205,7 +205,10 @@ int help(char* args){
 }
 
 int beep(char* args){
-	runSyscall(BEEP,0x0,0x0,0x0);
+
+	
+
+	//runSyscall(BEEP,0x0,0x0,0x0);
 	return 0;
 }
 
@@ -271,6 +274,9 @@ int game(){
 	
 	int gameprocess= runSyscall(CREATE_PROCESS,(uint64_t)gameS,"PianoTiles",0x0);
 	int inputprocess = runSyscall(CREATE_PROCESS,(uint64_t)game_input,"GameInputProc",0x0);
+	runSyscall(CREATE_PROCESS,(uint64_t)gamesound,"GameInputProc",0x0);
+	printf("SE CREO GAME E INPUT CON PIDS : %d y %d  \n", gameprocess,inputprocess);
+
 	runSyscall(MQSEND,gameprocess,0x1,inputprocess);
 	runSyscall(MQSEND,inputprocess,0x1,gameprocess);
 	/*int proca =	runSyscall(CREATE_PROCESS,(uint64_t) pidtester, "tester", 0x0);

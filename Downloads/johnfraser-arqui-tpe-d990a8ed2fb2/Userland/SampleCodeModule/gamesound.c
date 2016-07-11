@@ -4,8 +4,16 @@
 #include "include/libasm.h"
 #include "include/sound.h"
 int gamesound(){
-	while(1){
-		//should check if sound has arrived from game,
-		runSyscall(BEEP,0x0,0x0,0x0);
+	
+	unsigned long a=0;
+	startSong("2");
+	while (1){
+		if(a<34222222){
+			a++;
+		}else{
+			a=0;
+			startSong("2");
+		}
 	}
+	
 }
