@@ -1,15 +1,18 @@
 #include "include/lib.h"
 
-char getCharx();
-
 
 int game_input(){
+	int pid = runSyscall(pid,0x0,0x0,0x0);
+	int gamepid = runSyscall(MQREAD,pid,0x1,0x0);
 	char input;
 	while (1){
 		input = getCharx();
-		if (input=='c'||input=='v'||input=='b'||input=='n'||input=='\n'){
-			//Send via messagequeue
-			printf("should be sneding to game\n");
+		if(input!= 0){
+			if (input=='c'||input=='v'||input=='b'||input=='n'||input=='\n'){
+				printf("Sending %c\n",input);
+				runSyscall(MQSEND,pid,gamepid,input);
+				runSyscall(MQSEND,gamepid,pid,input);
+			}
 		}
 	}
 }

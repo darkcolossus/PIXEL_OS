@@ -22,13 +22,23 @@ int sqr(int num);
 void clearTiles(int * notes, int speed);
 void updateNotes(int* tiles);
 int INITIAL_SPEED= 4;
+
+
 int gameS (){
-	
+	int pid =runSyscall(PID,0x0,0x0,0x0);
+	int inputpid=runSyscall(MQREAD,pid,0x1,0x0);
+
 	char input;
-	
 	showMenu();
 
-	do {
+
+while(1){
+	input=runSyscall(MQREAD,pid,input,0x0);
+	if(input!=0){
+		printf("%c\n",input);
+	}
+	}
+	/*do {
 		
 		printf("Choose an option\n");
 		input = getChar();
@@ -44,7 +54,7 @@ int gameS (){
 	if ((input=getChar())=='\n')
 		startGame();
 
-	}
+	}*/
 
 }
 

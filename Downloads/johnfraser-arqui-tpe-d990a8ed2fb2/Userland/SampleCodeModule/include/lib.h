@@ -15,7 +15,7 @@ void clearScreen();
 // Reading
 void read(char* buffer, char delimiter);
 char getChar();
-
+char getCharx();
 int gameS();
 int gamesound();
 int game_input();

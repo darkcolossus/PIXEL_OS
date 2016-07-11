@@ -41,17 +41,18 @@ CommandDescriptor commands[TOTAL_COMMANDS];
 /***********
 **  Main  **
 ***********/
-
+static int hola = 1;
 int terminal() {
 
 	char buffer[200];
 	initCommandList();
 	clearScreen();
 	while(1) {
-
+		if(hola){
 			shellLine();
 			read(buffer,'\n');
 			executeCommand(buffer);
+		}
 	}
 	return 0;
 }
@@ -266,14 +267,27 @@ int game(){
 	
 	//runSyscall(CREATE_PROCESS,(uint64_t) gameS, "Piano Tiles", 0x0);
 	//runSyscall(CREATE_PROCESS,(uint64_t) gamesound, "Sound", 0x0);
+	hola=0;
 	
-	
-	int proca =	runSyscall(CREATE_PROCESS,(uint64_t) pidtester, "tester", 0x0);
+	int gameprocess= runSyscall(CREATE_PROCESS,(uint64_t)gameS,"PianoTiles",0x0);
+	int inputprocess = runSyscall(CREATE_PROCESS,(uint64_t)game_input,"GameInputProc",0x0);
+	runSyscall(MQSEND,gameprocess,0x1,inputprocess);
+	runSyscall(MQSEND,inputprocess,0x1,gameprocess);
+	/*int proca =	runSyscall(CREATE_PROCESS,(uint64_t) pidtester, "tester", 0x0);
 	int procb = runSyscall(CREATE_PROCESS,(int64_t)testter2, "testter2",0x0);
 	runSyscall(MQSEND, proca,0x1,procb);
 	runSyscall(MQSEND, procb,0x1,proca);
-
-
+		runSyscall(MQSEND, proca,0x1,procb);
+	runSyscall(MQSEND, procb,0x1,proca);
+		runSyscall(MQSEND, proca,0x1,procb);
+	runSyscall(MQSEND, procb,0x1,proca);
+		runSyscall(MQSEND, proca,0x1,procb);
+	runSyscall(MQSEND, procb,0x1,proca);
+		runSyscall(MQSEND, proca,0x1,procb);
+	runSyscall(MQSEND, procb,0x1,proca);
+		runSyscall(MQSEND, proca,0x1,procb);
+	runSyscall(MQSEND, procb,0x1,proca);
+	*/
 	//runSyscall(CREATE_PROCESS,(uint64_t) ipc, 0x0, 0x0);
 	//runSyscall(CREATE_PROCESS,(uint64_t) ipc, 0x0, 0x0);
 	//gameS();
@@ -284,14 +298,14 @@ int game(){
 int pidtester()
 {	
 	int pid = runSyscall(PID,0x0,0x0,0x0);
-	
-	while (1){
+	int a=1;
+	while (a){
 		int c;
 		c=(int)runSyscall(MQREAD,pid,0x1,0x0);
 		if(c!=0){
 			printf("Soy el proceso %d y me mandaron el pid del proceso %d \n",pid,c);
 		}else{
-			printf("ASD");
+			a=0;
 		}
 	}
 	return 0;
@@ -306,9 +320,9 @@ int testter2()
 		int c;
 		c=(int)runSyscall(MQREAD,pid,0x1,0x0);
 		if(c!=0){
-			printf("Soy el proceso %d y me mandaron el pid del proceso %d \n",pid,c);
+			//printf("Soy el proceso %d y me mandaron el pid del proceso %d \n",pid,c);
 		}else{
-			printf("ASD");
+			
 		}
 	}
 	return 0;

@@ -85,7 +85,7 @@ uint64_t syscallHandler(uint64_t a, uint64_t b, uint64_t c, uint64_t d){
 			break;
 		}
 		case MQREAD:{
-			message * ms = readMessage(b,c);
+			message * ms = getFirstMessage(b,c);
 			if (ms == NULL){
 				return 0;
 			}

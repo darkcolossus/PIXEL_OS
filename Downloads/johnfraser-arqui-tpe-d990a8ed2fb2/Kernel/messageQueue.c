@@ -135,7 +135,7 @@ message * getFirstMessage(uint64_t emisor, uint64_t receptor){
 		}
 		msgs = msgs->next;
 	}
-	//node->msgs = node->msgs->next;
+	node->msgs=node->msgs->next;
 	return firstMessage;
 
 }
