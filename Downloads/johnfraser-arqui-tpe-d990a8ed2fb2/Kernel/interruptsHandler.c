@@ -1,6 +1,9 @@
 #include "interruptsHandler.h"
 #include "scheduler.h"
+#include "lib.h"
 #include "process.h"
+#include "stddef.h"
+#include "messageQueue.h"
 extern void _beep();
 int checktest();
 void printWaitingProcesses();
@@ -22,7 +25,7 @@ void keyboardHandler(void) {
 	return;
 }
 
-void syscallHandler(uint64_t a, ddword b, ddword c, ddword d){
+uint64_t syscallHandler(uint64_t a, uint64_t b, uint64_t c, uint64_t d){
 	switch (a) {
 		case WRITE: {
 			kWrite((char*)c, (int) d);
@@ -51,9 +54,10 @@ void syscallHandler(uint64_t a, ddword b, ddword c, ddword d){
 		}
 		case CREATE_PROCESS:{
 			//addProcess(initProcess(0x400000, "prueba"));
-			process * p = createProcess( &checktest, "IDLE", 0, NULL);
+			process * p = createProcess( b, (char *) c, 0, NULL);
 			addProcessToWaiting(p);
-			
+			kprintDec(p->pid);
+			return p->pid;
 			break;
 		}
 		case DELETE_PROCESS:{
@@ -62,6 +66,8 @@ void syscallHandler(uint64_t a, ddword b, ddword c, ddword d){
 		}
 		case LIST_PROCESSES:{
 			printWaitingProcesses();
+			
+			
 			break;
 		}
 		case VIDEO:{
@@ -71,7 +77,24 @@ void syscallHandler(uint64_t a, ddword b, ddword c, ddword d){
 			pixel_wrap((int) b, (int) c, (int) d);
 			break;
 		}
+		case PID:{
+			return getCurrentWaiting()->pid;
+		}
+		case MQSEND:{
+			createMessage( b,  c, d, sizeof(uint64_t));
+			break;
+		}
+		case MQREAD:{
+			message * ms = readMessage(b,c);
+			if (ms == NULL){
+				return 0;
+			}
+			_beep();
+			return ms->msg;//ms->msg;
+			break;
+		}
 	}
+	return 0;
 }
 
 int checktest(){

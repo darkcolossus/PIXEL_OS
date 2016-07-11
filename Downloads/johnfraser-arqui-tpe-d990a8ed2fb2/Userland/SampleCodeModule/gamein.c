@@ -1,7 +1,7 @@
 #include "include/lib.h"
 
 char getCharx();
-int game_input();
+
 
 int game_input(){
 	char input;

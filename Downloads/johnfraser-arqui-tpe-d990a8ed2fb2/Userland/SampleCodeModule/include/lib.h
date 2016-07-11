@@ -17,6 +17,8 @@ void read(char* buffer, char delimiter);
 char getChar();
 
 int gameS();
+int gamesound();
+int game_input();
 
 // Helpers
 int numberLength (int i);

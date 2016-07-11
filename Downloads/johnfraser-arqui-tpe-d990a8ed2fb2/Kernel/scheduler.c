@@ -101,7 +101,7 @@ void printList(pNodeList * pq){
    pNode *ptr = pq->current;
 	 if(ptr == NULL)
 		return;
- 	 kputString("PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
+ 	 kputString("..PID\t\t\tName\t\t\tState\t\t\tForeground\t\t\tMemory");
 	 kputNewLine();
 	 int i;
    kDisableInterrupts();

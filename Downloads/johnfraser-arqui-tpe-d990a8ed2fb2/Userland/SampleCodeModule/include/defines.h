@@ -24,7 +24,10 @@ typedef enum SYSTEM_CALLS {
         DELETE_PROCESS = 0x9,
         LIST_PROCESSES = 0xA,
         VIDEO =0xB,
-        PIXEL =0xC
+        PIXEL =0xC,
+        PID =0xD,
+        MQSEND = 0XE,
+        MQREAD = 0XF,
 } SYSCALLS;
 
 typedef int (*action)(char*);

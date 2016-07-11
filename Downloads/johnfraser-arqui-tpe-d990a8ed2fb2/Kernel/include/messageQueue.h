@@ -13,5 +13,5 @@ int messageQueueSize();
 int existsMessage(uint64_t receptor);
 void deleteMessagesFromReceiver(uint64_t receptor);
 message * getFirstMessage(uint64_t emisor, uint64_t receptor);
-
+message *  readMessage(uint64_t sender, uint64_t receiver);
 #endif

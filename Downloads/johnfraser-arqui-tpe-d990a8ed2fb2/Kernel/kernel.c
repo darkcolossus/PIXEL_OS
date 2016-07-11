@@ -7,6 +7,10 @@
 #include "include/keyboard.h"
 #include "include/idt.h"
 #include "include/paging.h"
+#include "include/scheduler.h"
+#include "include/memory.h"
+#include "include/process.h"
+#include "include/messageQueue.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -106,8 +110,10 @@ int main()
 	kKBInitialize();
 	kInitializeDisplay();
 	kIDTInitialize();
-
-	((EntryPoint)sampleCodeModuleAddress)();
+	messageQueueInit();
+	EntryPoint main = (EntryPoint)sampleCodeModuleAddress;
+	main(0,0);
+	//((int *)sampleCodeModuleAddress)();
 
 	return 0;
 }

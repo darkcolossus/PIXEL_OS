@@ -23,8 +23,8 @@ void clearTiles(int * notes, int speed);
 void updateNotes(int* tiles);
 int INITIAL_SPEED= 4;
 int gameS (){
-	while(1){}
-	/*char input;
+	
+	char input;
 	
 	showMenu();
 
@@ -44,7 +44,7 @@ int gameS (){
 	if ((input=getChar())=='\n')
 		startGame();
 
-	}*/
+	}
 
 }
 
@@ -487,13 +487,13 @@ void getSequence(int* tiles, int time){
 void showMenu(){
 	clearScreen();
 
-	printf("Welcome to the most ????????? GAME EVER\n");
+	printf("P I A N O     T I L E S\n");
 	printf("\n\n\n\n\n");
-	printf("You'll need to avoid the targets with the A D keys\n");
+	printf("you'll need to click on every tile before they go past the circles\n");
 	printf("\n\n\n\n\n");
 	printf("Press ENTER when ready to play\n");
 	printf("\n\n\n\n\n");
-	printf("Or q if you'd rather leave\n");
+	printf("Use the C V B N keys to control each one of the four circles\n");
 	printf("\n\n\n\n\n");
 
 	return;

@@ -135,7 +135,25 @@ message * getFirstMessage(uint64_t emisor, uint64_t receptor){
 		}
 		msgs = msgs->next;
 	}
-
+	//node->msgs = node->msgs->next;
 	return firstMessage;
 
+}
+
+
+message *  readMessage(uint64_t sender, uint64_t receiver){
+    msgQueueNode * node = getQueueNode(receiver);
+    message * msgs= node ->msgs;
+    while(msgs != NULL){
+        if(msgs->senderId == sender){
+            message* aux = msgs;
+            msgs = msgs->next;
+            return aux;
+        }
+        msgs = msgs->next;
+    }
+    addToBlocked(receiver);
+    readMessage(receiver, sender);
+    return NULL;
+   
 }
